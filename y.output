@@ -1,0 +1,501 @@
+   0  $accept : input $end
+
+   1  input :
+   2        | expr NEWLINE
+
+   3  expr : test
+   4       | test EQ PA test PC
+
+   5  test : or_test
+
+   6  or_test : and_expr
+   7          | or_test ORB and_expr
+
+   8  and_expr : arith_expr
+   9           | and_expr ANDB arith_expr
+
+  10  arith_expr : term
+  11             | term MAS arith_expr
+  12             | term MENOS arith_expr
+
+  13  term : factor
+  14       | factor POR term
+  15       | factor DIV term
+  16       | factor MODULO term
+  17       | factor DIVENTERA term
+
+  18  factor : MAS factor
+  19         | MENOS factor
+  20         | power
+
+  21  power : atom
+  22        | atom POTENCIA factor
+
+  23  atom : CADENA
+  24       | ENTERO
+  25       | REAL
+  26       | IDENTIFIER
+
+state 0
+	$accept : . input $end  (0)
+	input : .  (1)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	$end  reduce 1
+
+	input  goto 7
+	expr  goto 8
+	test  goto 9
+	or_test  goto 10
+	and_expr  goto 11
+	arith_expr  goto 12
+	term  goto 13
+	factor  goto 14
+	power  goto 15
+	atom  goto 16
+
+
+state 1
+	atom : CADENA .  (23)
+
+	.  reduce 23
+
+
+state 2
+	atom : IDENTIFIER .  (26)
+
+	.  reduce 26
+
+
+state 3
+	atom : ENTERO .  (24)
+
+	.  reduce 24
+
+
+state 4
+	atom : REAL .  (25)
+
+	.  reduce 25
+
+
+state 5
+	factor : MAS . factor  (18)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 17
+	power  goto 15
+	atom  goto 16
+
+
+state 6
+	factor : MENOS . factor  (19)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 18
+	power  goto 15
+	atom  goto 16
+
+
+state 7
+	$accept : input . $end  (0)
+
+	$end  accept
+
+
+state 8
+	input : expr . NEWLINE  (2)
+
+	NEWLINE  shift 19
+	.  error
+
+
+state 9
+	expr : test .  (3)
+	expr : test . EQ PA test PC  (4)
+
+	EQ  shift 20
+	NEWLINE  reduce 3
+
+
+state 10
+	test : or_test .  (5)
+	or_test : or_test . ORB and_expr  (7)
+
+	ORB  shift 21
+	NEWLINE  reduce 5
+	EQ  reduce 5
+	PC  reduce 5
+
+
+state 11
+	or_test : and_expr .  (6)
+	and_expr : and_expr . ANDB arith_expr  (9)
+
+	ANDB  shift 22
+	NEWLINE  reduce 6
+	EQ  reduce 6
+	ORB  reduce 6
+	PC  reduce 6
+
+
+state 12
+	and_expr : arith_expr .  (8)
+
+	.  reduce 8
+
+
+state 13
+	arith_expr : term .  (10)
+	arith_expr : term . MAS arith_expr  (11)
+	arith_expr : term . MENOS arith_expr  (12)
+
+	MAS  shift 23
+	MENOS  shift 24
+	NEWLINE  reduce 10
+	EQ  reduce 10
+	ANDB  reduce 10
+	ORB  reduce 10
+	PC  reduce 10
+
+
+state 14
+	term : factor .  (13)
+	term : factor . POR term  (14)
+	term : factor . DIV term  (15)
+	term : factor . MODULO term  (16)
+	term : factor . DIVENTERA term  (17)
+
+	POR  shift 25
+	DIV  shift 26
+	DIVENTERA  shift 27
+	MODULO  shift 28
+	NEWLINE  reduce 13
+	MAS  reduce 13
+	MENOS  reduce 13
+	EQ  reduce 13
+	ANDB  reduce 13
+	ORB  reduce 13
+	PC  reduce 13
+
+
+state 15
+	factor : power .  (20)
+
+	.  reduce 20
+
+
+state 16
+	power : atom .  (21)
+	power : atom . POTENCIA factor  (22)
+
+	POTENCIA  shift 29
+	NEWLINE  reduce 21
+	MAS  reduce 21
+	MENOS  reduce 21
+	POR  reduce 21
+	DIV  reduce 21
+	DIVENTERA  reduce 21
+	MODULO  reduce 21
+	EQ  reduce 21
+	ANDB  reduce 21
+	ORB  reduce 21
+	PC  reduce 21
+
+
+state 17
+	factor : MAS factor .  (18)
+
+	.  reduce 18
+
+
+state 18
+	factor : MENOS factor .  (19)
+
+	.  reduce 19
+
+
+state 19
+	input : expr NEWLINE .  (2)
+
+	.  reduce 2
+
+
+state 20
+	expr : test EQ . PA test PC  (4)
+
+	PA  shift 30
+	.  error
+
+
+state 21
+	or_test : or_test ORB . and_expr  (7)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	and_expr  goto 31
+	arith_expr  goto 12
+	term  goto 13
+	factor  goto 14
+	power  goto 15
+	atom  goto 16
+
+
+state 22
+	and_expr : and_expr ANDB . arith_expr  (9)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	arith_expr  goto 32
+	term  goto 13
+	factor  goto 14
+	power  goto 15
+	atom  goto 16
+
+
+state 23
+	arith_expr : term MAS . arith_expr  (11)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	arith_expr  goto 33
+	term  goto 13
+	factor  goto 14
+	power  goto 15
+	atom  goto 16
+
+
+state 24
+	arith_expr : term MENOS . arith_expr  (12)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	arith_expr  goto 34
+	term  goto 13
+	factor  goto 14
+	power  goto 15
+	atom  goto 16
+
+
+state 25
+	term : factor POR . term  (14)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	term  goto 35
+	factor  goto 14
+	power  goto 15
+	atom  goto 16
+
+
+state 26
+	term : factor DIV . term  (15)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	term  goto 36
+	factor  goto 14
+	power  goto 15
+	atom  goto 16
+
+
+state 27
+	term : factor DIVENTERA . term  (17)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	term  goto 37
+	factor  goto 14
+	power  goto 15
+	atom  goto 16
+
+
+state 28
+	term : factor MODULO . term  (16)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	term  goto 38
+	factor  goto 14
+	power  goto 15
+	atom  goto 16
+
+
+state 29
+	power : atom POTENCIA . factor  (22)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 39
+	power  goto 15
+	atom  goto 16
+
+
+state 30
+	expr : test EQ PA . test PC  (4)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	test  goto 40
+	or_test  goto 10
+	and_expr  goto 11
+	arith_expr  goto 12
+	term  goto 13
+	factor  goto 14
+	power  goto 15
+	atom  goto 16
+
+
+state 31
+	or_test : or_test ORB and_expr .  (7)
+	and_expr : and_expr . ANDB arith_expr  (9)
+
+	ANDB  shift 22
+	NEWLINE  reduce 7
+	EQ  reduce 7
+	ORB  reduce 7
+	PC  reduce 7
+
+
+state 32
+	and_expr : and_expr ANDB arith_expr .  (9)
+
+	.  reduce 9
+
+
+state 33
+	arith_expr : term MAS arith_expr .  (11)
+
+	.  reduce 11
+
+
+state 34
+	arith_expr : term MENOS arith_expr .  (12)
+
+	.  reduce 12
+
+
+state 35
+	term : factor POR term .  (14)
+
+	.  reduce 14
+
+
+state 36
+	term : factor DIV term .  (15)
+
+	.  reduce 15
+
+
+state 37
+	term : factor DIVENTERA term .  (17)
+
+	.  reduce 17
+
+
+state 38
+	term : factor MODULO term .  (16)
+
+	.  reduce 16
+
+
+state 39
+	power : atom POTENCIA factor .  (22)
+
+	.  reduce 22
+
+
+state 40
+	expr : test EQ PA test . PC  (4)
+
+	PC  shift 41
+	.  error
+
+
+state 41
+	expr : test EQ PA test PC .  (4)
+
+	.  reduce 4
+
+
+45 terminals, 11 nonterminals
+27 grammar rules, 42 states

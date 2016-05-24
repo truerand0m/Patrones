@@ -1,0 +1,202 @@
+java Parser primeraPrac.py
+loop
+yyn:0  state:0  yychar:-1
+ next yychar:260
+state 0, shifting to state 3
+loop
+state 3, reducing 1 by rule 17 (atom : ENTERO)
+reduce
+after reduction, shifting from state 0 to state 12
+loop
+yyn:0  state:12  yychar:-1
+ next yychar:281
+reduce
+state 12, reducing 1 by rule 14 (power : atom)
+reduce
+after reduction, shifting from state 0 to state 11
+loop
+state 11, reducing 1 by rule 13 (factor : power)
+reduce
+after reduction, shifting from state 0 to state 10
+loop
+yyn:0  state:10  yychar:281
+state 10, shifting to state 18
+loop
+yyn:0  state:18  yychar:-1
+ next yychar:260
+state 18, shifting to state 3
+loop
+state 3, reducing 1 by rule 17 (atom : ENTERO)
+reduce
+after reduction, shifting from state 18 to state 12
+loop
+yyn:0  state:12  yychar:-1
+ next yychar:279
+reduce
+state 12, reducing 1 by rule 14 (power : atom)
+reduce
+after reduction, shifting from state 18 to state 11
+loop
+state 11, reducing 1 by rule 13 (factor : power)
+reduce
+after reduction, shifting from state 18 to state 10
+loop
+yyn:0  state:10  yychar:279
+reduce
+state 10, reducing 1 by rule 6 (term : factor)
+reduce
+after reduction, shifting from state 18 to state 25
+loop
+state 25, reducing 3 by rule 7 (term : factor POR term)
+reduce
+after reduction, shifting from state 0 to state 9
+loop
+yyn:0  state:9  yychar:279
+state 9, shifting to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:260
+state 16, shifting to state 3
+loop
+state 3, reducing 1 by rule 17 (atom : ENTERO)
+reduce
+after reduction, shifting from state 16 to state 12
+loop
+yyn:0  state:12  yychar:-1
+ next yychar:280
+reduce
+state 12, reducing 1 by rule 14 (power : atom)
+reduce
+after reduction, shifting from state 16 to state 11
+loop
+state 11, reducing 1 by rule 13 (factor : power)
+reduce
+after reduction, shifting from state 16 to state 10
+loop
+yyn:0  state:10  yychar:280
+reduce
+state 10, reducing 1 by rule 6 (term : factor)
+reduce
+after reduction, shifting from state 16 to state 9
+loop
+yyn:0  state:9  yychar:280
+state 9, shifting to state 17
+loop
+yyn:0  state:17  yychar:-1
+ next yychar:260
+state 17, shifting to state 3
+loop
+state 3, reducing 1 by rule 17 (atom : ENTERO)
+reduce
+after reduction, shifting from state 17 to state 12
+loop
+yyn:0  state:12  yychar:-1
+ next yychar:279
+reduce
+state 12, reducing 1 by rule 14 (power : atom)
+reduce
+after reduction, shifting from state 17 to state 11
+loop
+state 11, reducing 1 by rule 13 (factor : power)
+reduce
+after reduction, shifting from state 17 to state 10
+loop
+yyn:0  state:10  yychar:279
+reduce
+state 10, reducing 1 by rule 6 (term : factor)
+reduce
+after reduction, shifting from state 17 to state 9
+loop
+yyn:0  state:9  yychar:279
+state 9, shifting to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:260
+state 16, shifting to state 3
+loop
+state 3, reducing 1 by rule 17 (atom : ENTERO)
+reduce
+after reduction, shifting from state 16 to state 12
+loop
+yyn:0  state:12  yychar:-1
+ next yychar:258
+reduce
+state 12, reducing 1 by rule 14 (power : atom)
+reduce
+after reduction, shifting from state 16 to state 11
+loop
+state 11, reducing 1 by rule 13 (factor : power)
+reduce
+after reduction, shifting from state 16 to state 10
+loop
+yyn:0  state:10  yychar:258
+reduce
+state 10, reducing 1 by rule 6 (term : factor)
+reduce
+after reduction, shifting from state 16 to state 9
+loop
+yyn:0  state:9  yychar:258
+reduce
+state 9, reducing 1 by rule 3 (arith_expr : term)
+reduce
+after reduction, shifting from state 16 to state 23
+loop
+state 23, reducing 3 by rule 4 (arith_expr : term MAS arith_expr)
+reduce
+after reduction, shifting from state 17 to state 24
+loop
+state 24, reducing 3 by rule 5 (arith_expr : term MENOS arith_expr)
+reduce
+after reduction, shifting from state 16 to state 23
+loop
+state 23, reducing 3 by rule 4 (arith_expr : term MAS arith_expr)
+reduce
+after reduction, shifting from state 0 to state 8
+loop
+yyn:0  state:8  yychar:258
+state 8, shifting to state 15
+loop
+state 15, reducing 2 by rule 2 (input : arith_expr NEWLINE)
+Llegue a input
+*****************************
+Nodo TermX :
+
+Izq[
+Nodo TermX :
+
+Izq[
+Soy hoja entera: class IntLeaf
+]
+
+
+Der[
+Soy hoja entera: class IntLeaf
+]
+]
+
+
+Der[
+Nodo TermX :
+
+Izq[
+Soy hoja entera: class IntLeaf
+]
+
+
+Der[
+Nodo TermX :
+
+Izq[
+Soy hoja entera: class IntLeaf
+]
+
+
+Der[
+Soy hoja entera: class IntLeaf
+]
+]
+]
+*****************************
+reduce
+After reduction, shifting from state 0 to state 7
+state 7, reading 0 (end-of-file)

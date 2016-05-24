@@ -1,1 +1,427 @@
-test
+java Parser primeraPrac.py
+loop
+yyn:0  state:0  yychar:-1
+ next yychar:279
+state 0, shifting to state 5
+loop
+yyn:0  state:5  yychar:-1
+ next yychar:260
+state 5, shifting to state 3
+loop
+state 3, reducing 1 by rule 24 (atom : ENTERO)
+reduce
+after reduction, shifting from state 5 to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:281
+reduce
+state 16, reducing 1 by rule 21 (power : atom)
+reduce
+after reduction, shifting from state 5 to state 15
+loop
+state 15, reducing 1 by rule 20 (factor : power)
+reduce
+after reduction, shifting from state 5 to state 17
+loop
+state 17, reducing 2 by rule 18 (factor : MAS factor)
+reduce
+after reduction, shifting from state 0 to state 14
+loop
+yyn:0  state:14  yychar:281
+state 14, shifting to state 25
+loop
+yyn:0  state:25  yychar:-1
+ next yychar:279
+state 25, shifting to state 5
+loop
+yyn:0  state:5  yychar:-1
+ next yychar:260
+state 5, shifting to state 3
+loop
+state 3, reducing 1 by rule 24 (atom : ENTERO)
+reduce
+after reduction, shifting from state 5 to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:279
+reduce
+state 16, reducing 1 by rule 21 (power : atom)
+reduce
+after reduction, shifting from state 5 to state 15
+loop
+state 15, reducing 1 by rule 20 (factor : power)
+reduce
+after reduction, shifting from state 5 to state 17
+loop
+state 17, reducing 2 by rule 18 (factor : MAS factor)
+reduce
+after reduction, shifting from state 25 to state 14
+loop
+yyn:0  state:14  yychar:279
+reduce
+state 14, reducing 1 by rule 13 (term : factor)
+reduce
+after reduction, shifting from state 25 to state 35
+loop
+state 35, reducing 3 by rule 14 (term : factor POR term)
+reduce
+after reduction, shifting from state 0 to state 13
+loop
+yyn:0  state:13  yychar:279
+state 13, shifting to state 23
+loop
+yyn:0  state:23  yychar:-1
+ next yychar:260
+state 23, shifting to state 3
+loop
+state 3, reducing 1 by rule 24 (atom : ENTERO)
+reduce
+after reduction, shifting from state 23 to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:280
+reduce
+state 16, reducing 1 by rule 21 (power : atom)
+reduce
+after reduction, shifting from state 23 to state 15
+loop
+state 15, reducing 1 by rule 20 (factor : power)
+reduce
+after reduction, shifting from state 23 to state 14
+loop
+yyn:0  state:14  yychar:280
+reduce
+state 14, reducing 1 by rule 13 (term : factor)
+reduce
+after reduction, shifting from state 23 to state 13
+loop
+yyn:0  state:13  yychar:280
+state 13, shifting to state 24
+loop
+yyn:0  state:24  yychar:-1
+ next yychar:260
+state 24, shifting to state 3
+loop
+state 3, reducing 1 by rule 24 (atom : ENTERO)
+reduce
+after reduction, shifting from state 24 to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:295
+reduce
+state 16, reducing 1 by rule 21 (power : atom)
+reduce
+after reduction, shifting from state 24 to state 15
+loop
+state 15, reducing 1 by rule 20 (factor : power)
+reduce
+after reduction, shifting from state 24 to state 14
+loop
+yyn:0  state:14  yychar:295
+reduce
+state 14, reducing 1 by rule 13 (term : factor)
+reduce
+after reduction, shifting from state 24 to state 13
+loop
+yyn:0  state:13  yychar:295
+reduce
+state 13, reducing 1 by rule 10 (arith_expr : term)
+reduce
+after reduction, shifting from state 24 to state 34
+loop
+state 34, reducing 3 by rule 12 (arith_expr : term MENOS arith_expr)
+reduce
+after reduction, shifting from state 23 to state 33
+loop
+state 33, reducing 3 by rule 11 (arith_expr : term MAS arith_expr)
+reduce
+after reduction, shifting from state 0 to state 12
+loop
+state 12, reducing 1 by rule 8 (and_expr : arith_expr)
+reduce
+after reduction, shifting from state 0 to state 11
+loop
+yyn:0  state:11  yychar:295
+state 11, shifting to state 22
+loop
+yyn:0  state:22  yychar:-1
+ next yychar:260
+state 22, shifting to state 3
+loop
+state 3, reducing 1 by rule 24 (atom : ENTERO)
+reduce
+after reduction, shifting from state 22 to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:279
+reduce
+state 16, reducing 1 by rule 21 (power : atom)
+reduce
+after reduction, shifting from state 22 to state 15
+loop
+state 15, reducing 1 by rule 20 (factor : power)
+reduce
+after reduction, shifting from state 22 to state 14
+loop
+yyn:0  state:14  yychar:279
+reduce
+state 14, reducing 1 by rule 13 (term : factor)
+reduce
+after reduction, shifting from state 22 to state 13
+loop
+yyn:0  state:13  yychar:279
+state 13, shifting to state 23
+loop
+yyn:0  state:23  yychar:-1
+ next yychar:260
+state 23, shifting to state 3
+loop
+state 3, reducing 1 by rule 24 (atom : ENTERO)
+reduce
+after reduction, shifting from state 23 to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:296
+reduce
+state 16, reducing 1 by rule 21 (power : atom)
+reduce
+after reduction, shifting from state 23 to state 15
+loop
+state 15, reducing 1 by rule 20 (factor : power)
+reduce
+after reduction, shifting from state 23 to state 14
+loop
+yyn:0  state:14  yychar:296
+reduce
+state 14, reducing 1 by rule 13 (term : factor)
+reduce
+after reduction, shifting from state 23 to state 13
+loop
+yyn:0  state:13  yychar:296
+reduce
+state 13, reducing 1 by rule 10 (arith_expr : term)
+reduce
+after reduction, shifting from state 23 to state 33
+loop
+state 33, reducing 3 by rule 11 (arith_expr : term MAS arith_expr)
+reduce
+after reduction, shifting from state 22 to state 32
+loop
+state 32, reducing 3 by rule 9 (and_expr : and_expr ANDB arith_expr)
+reduce
+after reduction, shifting from state 0 to state 11
+loop
+yyn:0  state:11  yychar:296
+reduce
+state 11, reducing 1 by rule 6 (or_test : and_expr)
+reduce
+after reduction, shifting from state 0 to state 10
+loop
+yyn:0  state:10  yychar:296
+state 10, shifting to state 21
+loop
+yyn:0  state:21  yychar:-1
+ next yychar:260
+state 21, shifting to state 3
+loop
+state 3, reducing 1 by rule 24 (atom : ENTERO)
+reduce
+after reduction, shifting from state 21 to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:292
+reduce
+state 16, reducing 1 by rule 21 (power : atom)
+reduce
+after reduction, shifting from state 21 to state 15
+loop
+state 15, reducing 1 by rule 20 (factor : power)
+reduce
+after reduction, shifting from state 21 to state 14
+loop
+yyn:0  state:14  yychar:292
+reduce
+state 14, reducing 1 by rule 13 (term : factor)
+reduce
+after reduction, shifting from state 21 to state 13
+loop
+yyn:0  state:13  yychar:292
+reduce
+state 13, reducing 1 by rule 10 (arith_expr : term)
+reduce
+after reduction, shifting from state 21 to state 12
+loop
+state 12, reducing 1 by rule 8 (and_expr : arith_expr)
+reduce
+after reduction, shifting from state 21 to state 31
+loop
+yyn:0  state:31  yychar:292
+reduce
+state 31, reducing 3 by rule 7 (or_test : or_test ORB and_expr)
+reduce
+after reduction, shifting from state 0 to state 10
+loop
+yyn:0  state:10  yychar:292
+reduce
+state 10, reducing 1 by rule 5 (test : or_test)
+reduce
+after reduction, shifting from state 0 to state 9
+loop
+yyn:0  state:9  yychar:292
+state 9, shifting to state 20
+loop
+yyn:0  state:20  yychar:-1
+ next yychar:293
+state 20, shifting to state 30
+loop
+yyn:0  state:30  yychar:-1
+ next yychar:260
+state 30, shifting to state 3
+loop
+state 3, reducing 1 by rule 24 (atom : ENTERO)
+reduce
+after reduction, shifting from state 30 to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:297
+reduce
+state 16, reducing 1 by rule 21 (power : atom)
+reduce
+after reduction, shifting from state 30 to state 15
+loop
+state 15, reducing 1 by rule 20 (factor : power)
+reduce
+after reduction, shifting from state 30 to state 14
+loop
+yyn:0  state:14  yychar:297
+reduce
+state 14, reducing 1 by rule 13 (term : factor)
+reduce
+after reduction, shifting from state 30 to state 13
+loop
+yyn:0  state:13  yychar:297
+reduce
+state 13, reducing 1 by rule 10 (arith_expr : term)
+reduce
+after reduction, shifsting from state 30 to state 12
+loop
+state 12, reducing 1 by rule 8 (and_expr : arith_expr)
+reduce
+after reduction, shifting from state 30 to state 11
+loop
+yyn:0  state:11  yychar:297
+reduce
+state 11, reducing 1 by rule 6 (or_test : and_expr)
+reduce
+after reduction, shifting from state 30 to state 10
+loop
+yyn:0  state:10  yychar:297
+reduce
+state 10, reducing 1 by rule 5 (test : or_test)
+reduce
+after reduction, shifting from state 30 to state 40
+loop
+yyn:0  state:40  yychar:297
+state 40, shifting to state 41
+loop
+state 41, reducing 5 by rule 4 (expr : test EQ PA test PC)
+reduce
+after reduction, shifting from state 0 to state 8
+loop
+yyn:0  state:8  yychar:-1
+ next yychar:258
+state 8, shifting to state 19
+loop
+state 19, reducing 2 by rule 2 (input : expr NEWLINE)
+Llegue a input
+*****************************
+Soy nodo Expr:
+Soy nodo or:
+Soy nodo and:
+Soy nodo Arith:[
+Soy nodo term:[
+1
+Soy nodo Arith:[
+Soy nodo entero con valor: 8
+2
+Soy nodo entero con valor: 7
+]
+]
+Soy nodo Arith:[
+Soy nodo entero con valor: 5
+1
+Soy nodo entero con valor: 2
+]
+Soy nodo entero con valor: 3
+Soy nodo entero con valor: 3
+Nodo Expr :
+
+Izq[
+Nodo Or :
+
+Izq[
+Nodo And :
+
+Izq[
+Nodo Arith :
+
+Izq[
+
+Izq[
+Nodo factor: + 
+Soy hoja entera: class IntLeaf : 3
+]
+*
+Der[
+Nodo factor: + 
+Soy hoja entera: class IntLeaf : 4
+]
+]
++
+Der[
+Nodo Arith :
+
+Izq[
+Soy hoja entera: class IntLeaf : 8
+]
+-
+Der[
+Soy hoja entera: class IntLeaf : 7
+]
+]
+]
+&
+Der[
+Nodo Arith :
+
+Izq[
+Soy hoja entera: class IntLeaf : 5
+]
++
+Der[
+Soy hoja entera: class IntLeaf : 2
+]
+]
+]
+ or 
+Der[
+Soy hoja entera: class IntLeaf : 3
+]
+]
+ = 
+Der[
+Soy hoja entera: class IntLeaf : 3
+]
+--------------------------Arbol---------------------
+                                                                                                                              ( =  )                                                                                                                              
+                                                                                  ( or )                                                                                                                                                                    (I:3 )                                                                                  
+                                                ( &  )                                                                                                (I:3 )                                                                                                (    )                                                                                                (    )                                                
+                        (Ar:+)                                                (Ar:+)                                                (    )                                                (    )                                                (    )                                                (    )                                                (    )                                                (    )                        
+           (T:* )                 (Ar:-)                      (I:5 )                      (I:2 )                      (    )                      (    )                      (    )                      (    )           
+   (F:+ )      (F:+ )      (I:8 )      (I:7 )      (    )      (    )      (    )      (    )   
+(I:3 )(    )(I:4 )(    )(    )(    )(    )(    )(    )(    )(    )(    )(    )(    )(    )(    )
+----------------------------------------------------
+*****************************
+reduce
+After reduction, shifting from state 0 to state 7
+state 7, reading 0 (end-of-file)
