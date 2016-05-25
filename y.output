@@ -1,40 +1,104 @@
    0  $accept : input $end
 
    1  input :
-   2        | expr NEWLINE
+   2        | stmt
 
-   3  expr : test
-   4       | test EQ PA test PC
+   3  suite : simple
+   4        | NEWLINE INDENT auxsuite DEDENT
 
-   5  test : or_test
+   5  auxsuite : stmt
+   6           | auxsuite stmt
 
-   6  or_test : and_expr
-   7          | or_test ORB and_expr
+   7  stmt : simple
+   8       | compound_stmt
 
-   8  and_expr : arith_expr
-   9           | and_expr ANDB arith_expr
+   9  compound_stmt : if_stmt
+  10                | while_stmt
 
-  10  arith_expr : term
-  11             | term MAS arith_expr
-  12             | term MENOS arith_expr
+  11  if_stmt : IF test DOBLEPUNTO suite
+  12          | IF test DOBLEPUNTO suite auxif
 
-  13  term : factor
-  14       | factor POR term
-  15       | factor DIV term
-  16       | factor MODULO term
-  17       | factor DIVENTERA term
+  13  auxif : ELIF test DOBLEPUNTO suite
+  14        | auxif ELIF test DOBLEPUNTO suite
 
-  18  factor : MAS factor
-  19         | MENOS factor
-  20         | power
+  15  while_stmt : WHILE test DOBLEPUNTO suite
 
-  21  power : atom
-  22        | atom POTENCIA factor
+  16  simple : auxsimple PUNTOCOMA NEWLINE
+  17         | auxsimple NEWLINE
 
-  23  atom : CADENA
-  24       | ENTERO
-  25       | REAL
-  26       | IDENTIFIER
+  18  auxsimple : small_stmt
+  19            | auxsimple PUNTOCOMA small_stmt
+
+  20  small_stmt : expr_stmt
+  21             | print_stmt
+
+  22  expr_stmt : test
+  23            | test EQ test
+
+  24  print_stmt : PRINT
+  25             | PRINT auxprint
+  26             | PRINT ">>" auxprint
+
+  27  auxprint : test
+  28           | auxprint COMA test
+
+  29  test : or_test
+
+  30  or_test : and_test
+  31          | or_test OR and_test
+
+  32  and_test : not_test
+  33           | and_test AND not_test
+
+  34  not_test : comparison
+
+  35  comparison : expr
+  36             | expr auxcomp
+
+  37  auxcomp : comp_op expr
+  38          | auxcomp comp_op expr
+
+  39  comp_op : LE
+  40          | GR
+  41          | EQUALS
+  42          | GRQ
+  43          | LEQ
+  44          | DIFF
+  45          | IN
+  46          | NOTIN
+  47          | IS
+  48          | ISNOT
+
+  49  expr : xor_expr
+  50       | expr ORB xor_expr
+
+  51  xor_expr : and_expr
+  52           | xor_expr XOR and_expr
+
+  53  and_expr : arith_expr
+  54           | and_expr ANDB arith_expr
+
+  55  arith_expr : term
+  56             | term MAS arith_expr
+  57             | term MENOS arith_expr
+
+  58  term : factor
+  59       | factor POR term
+  60       | factor DIV term
+  61       | factor MODULO term
+  62       | factor DIVENTERA term
+
+  63  factor : MAS factor
+  64         | MENOS factor
+  65         | power
+
+  66  power : atom
+  67        | atom POTENCIA factor
+
+  68  atom : CADENA
+  69       | ENTERO
+  70       | REAL
+  71       | IDENTIFIER
 
 state 0
 	$accept : . input $end  (0)
@@ -44,458 +108,1553 @@ state 0
 	IDENTIFIER  shift 2
 	ENTERO  shift 3
 	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
+	WHILE  shift 5
+	IF  shift 6
+	PRINT  shift 7
+	MAS  shift 8
+	MENOS  shift 9
 	$end  reduce 1
 
-	input  goto 7
-	expr  goto 8
-	test  goto 9
-	or_test  goto 10
-	and_expr  goto 11
-	arith_expr  goto 12
-	term  goto 13
-	factor  goto 14
-	power  goto 15
-	atom  goto 16
+	input  goto 10
+	stmt  goto 11
+	simple  goto 12
+	compound_stmt  goto 13
+	if_stmt  goto 14
+	while_stmt  goto 15
+	test  goto 16
+	auxsimple  goto 17
+	small_stmt  goto 18
+	expr_stmt  goto 19
+	print_stmt  goto 20
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
 
 
 state 1
-	atom : CADENA .  (23)
+	atom : CADENA .  (68)
 
-	.  reduce 23
+	.  reduce 68
 
 
 state 2
-	atom : IDENTIFIER .  (26)
+	atom : IDENTIFIER .  (71)
 
-	.  reduce 26
+	.  reduce 71
 
 
 state 3
-	atom : ENTERO .  (24)
+	atom : ENTERO .  (69)
 
-	.  reduce 24
+	.  reduce 69
 
 
 state 4
-	atom : REAL .  (25)
+	atom : REAL .  (70)
 
-	.  reduce 25
+	.  reduce 70
 
 
 state 5
-	factor : MAS . factor  (18)
+	while_stmt : WHILE . test DOBLEPUNTO suite  (15)
 
 	CADENA  shift 1
 	IDENTIFIER  shift 2
 	ENTERO  shift 3
 	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
+	MAS  shift 8
+	MENOS  shift 9
 	.  error
 
-	factor  goto 17
-	power  goto 15
-	atom  goto 16
+	test  goto 33
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
 
 
 state 6
-	factor : MENOS . factor  (19)
+	if_stmt : IF . test DOBLEPUNTO suite  (11)
+	if_stmt : IF . test DOBLEPUNTO suite auxif  (12)
 
 	CADENA  shift 1
 	IDENTIFIER  shift 2
 	ENTERO  shift 3
 	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
+	MAS  shift 8
+	MENOS  shift 9
 	.  error
 
-	factor  goto 18
-	power  goto 15
-	atom  goto 16
+	test  goto 34
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
 
 
 state 7
+	print_stmt : PRINT .  (24)
+	print_stmt : PRINT . auxprint  (25)
+	print_stmt : PRINT . ">>" auxprint  (26)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	">>"  shift 35
+	NEWLINE  reduce 24
+	PUNTOCOMA  reduce 24
+
+	test  goto 36
+	auxprint  goto 37
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 8
+	factor : MAS . factor  (63)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	factor  goto 38
+	power  goto 31
+	atom  goto 32
+
+
+state 9
+	factor : MENOS . factor  (64)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	factor  goto 39
+	power  goto 31
+	atom  goto 32
+
+
+state 10
 	$accept : input . $end  (0)
 
 	$end  accept
 
 
-state 8
-	input : expr . NEWLINE  (2)
-
-	NEWLINE  shift 19
-	.  error
-
-
-state 9
-	expr : test .  (3)
-	expr : test . EQ PA test PC  (4)
-
-	EQ  shift 20
-	NEWLINE  reduce 3
-
-
-state 10
-	test : or_test .  (5)
-	or_test : or_test . ORB and_expr  (7)
-
-	ORB  shift 21
-	NEWLINE  reduce 5
-	EQ  reduce 5
-	PC  reduce 5
-
-
 state 11
-	or_test : and_expr .  (6)
-	and_expr : and_expr . ANDB arith_expr  (9)
-
-	ANDB  shift 22
-	NEWLINE  reduce 6
-	EQ  reduce 6
-	ORB  reduce 6
-	PC  reduce 6
-
-
-state 12
-	and_expr : arith_expr .  (8)
-
-	.  reduce 8
-
-
-state 13
-	arith_expr : term .  (10)
-	arith_expr : term . MAS arith_expr  (11)
-	arith_expr : term . MENOS arith_expr  (12)
-
-	MAS  shift 23
-	MENOS  shift 24
-	NEWLINE  reduce 10
-	EQ  reduce 10
-	ANDB  reduce 10
-	ORB  reduce 10
-	PC  reduce 10
-
-
-state 14
-	term : factor .  (13)
-	term : factor . POR term  (14)
-	term : factor . DIV term  (15)
-	term : factor . MODULO term  (16)
-	term : factor . DIVENTERA term  (17)
-
-	POR  shift 25
-	DIV  shift 26
-	DIVENTERA  shift 27
-	MODULO  shift 28
-	NEWLINE  reduce 13
-	MAS  reduce 13
-	MENOS  reduce 13
-	EQ  reduce 13
-	ANDB  reduce 13
-	ORB  reduce 13
-	PC  reduce 13
-
-
-state 15
-	factor : power .  (20)
-
-	.  reduce 20
-
-
-state 16
-	power : atom .  (21)
-	power : atom . POTENCIA factor  (22)
-
-	POTENCIA  shift 29
-	NEWLINE  reduce 21
-	MAS  reduce 21
-	MENOS  reduce 21
-	POR  reduce 21
-	DIV  reduce 21
-	DIVENTERA  reduce 21
-	MODULO  reduce 21
-	EQ  reduce 21
-	ANDB  reduce 21
-	ORB  reduce 21
-	PC  reduce 21
-
-
-state 17
-	factor : MAS factor .  (18)
-
-	.  reduce 18
-
-
-state 18
-	factor : MENOS factor .  (19)
-
-	.  reduce 19
-
-
-state 19
-	input : expr NEWLINE .  (2)
+	input : stmt .  (2)
 
 	.  reduce 2
 
 
-state 20
-	expr : test EQ . PA test PC  (4)
+state 12
+	stmt : simple .  (7)
 
-	PA  shift 30
-	.  error
-
-
-state 21
-	or_test : or_test ORB . and_expr  (7)
-
-	CADENA  shift 1
-	IDENTIFIER  shift 2
-	ENTERO  shift 3
-	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
-	.  error
-
-	and_expr  goto 31
-	arith_expr  goto 12
-	term  goto 13
-	factor  goto 14
-	power  goto 15
-	atom  goto 16
+	.  reduce 7
 
 
-state 22
-	and_expr : and_expr ANDB . arith_expr  (9)
+state 13
+	stmt : compound_stmt .  (8)
 
-	CADENA  shift 1
-	IDENTIFIER  shift 2
-	ENTERO  shift 3
-	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
-	.  error
-
-	arith_expr  goto 32
-	term  goto 13
-	factor  goto 14
-	power  goto 15
-	atom  goto 16
+	.  reduce 8
 
 
-state 23
-	arith_expr : term MAS . arith_expr  (11)
-
-	CADENA  shift 1
-	IDENTIFIER  shift 2
-	ENTERO  shift 3
-	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
-	.  error
-
-	arith_expr  goto 33
-	term  goto 13
-	factor  goto 14
-	power  goto 15
-	atom  goto 16
-
-
-state 24
-	arith_expr : term MENOS . arith_expr  (12)
-
-	CADENA  shift 1
-	IDENTIFIER  shift 2
-	ENTERO  shift 3
-	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
-	.  error
-
-	arith_expr  goto 34
-	term  goto 13
-	factor  goto 14
-	power  goto 15
-	atom  goto 16
-
-
-state 25
-	term : factor POR . term  (14)
-
-	CADENA  shift 1
-	IDENTIFIER  shift 2
-	ENTERO  shift 3
-	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
-	.  error
-
-	term  goto 35
-	factor  goto 14
-	power  goto 15
-	atom  goto 16
-
-
-state 26
-	term : factor DIV . term  (15)
-
-	CADENA  shift 1
-	IDENTIFIER  shift 2
-	ENTERO  shift 3
-	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
-	.  error
-
-	term  goto 36
-	factor  goto 14
-	power  goto 15
-	atom  goto 16
-
-
-state 27
-	term : factor DIVENTERA . term  (17)
-
-	CADENA  shift 1
-	IDENTIFIER  shift 2
-	ENTERO  shift 3
-	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
-	.  error
-
-	term  goto 37
-	factor  goto 14
-	power  goto 15
-	atom  goto 16
-
-
-state 28
-	term : factor MODULO . term  (16)
-
-	CADENA  shift 1
-	IDENTIFIER  shift 2
-	ENTERO  shift 3
-	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
-	.  error
-
-	term  goto 38
-	factor  goto 14
-	power  goto 15
-	atom  goto 16
-
-
-state 29
-	power : atom POTENCIA . factor  (22)
-
-	CADENA  shift 1
-	IDENTIFIER  shift 2
-	ENTERO  shift 3
-	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
-	.  error
-
-	factor  goto 39
-	power  goto 15
-	atom  goto 16
-
-
-state 30
-	expr : test EQ PA . test PC  (4)
-
-	CADENA  shift 1
-	IDENTIFIER  shift 2
-	ENTERO  shift 3
-	REAL  shift 4
-	MAS  shift 5
-	MENOS  shift 6
-	.  error
-
-	test  goto 40
-	or_test  goto 10
-	and_expr  goto 11
-	arith_expr  goto 12
-	term  goto 13
-	factor  goto 14
-	power  goto 15
-	atom  goto 16
-
-
-state 31
-	or_test : or_test ORB and_expr .  (7)
-	and_expr : and_expr . ANDB arith_expr  (9)
-
-	ANDB  shift 22
-	NEWLINE  reduce 7
-	EQ  reduce 7
-	ORB  reduce 7
-	PC  reduce 7
-
-
-state 32
-	and_expr : and_expr ANDB arith_expr .  (9)
+state 14
+	compound_stmt : if_stmt .  (9)
 
 	.  reduce 9
 
 
-state 33
-	arith_expr : term MAS arith_expr .  (11)
+state 15
+	compound_stmt : while_stmt .  (10)
 
-	.  reduce 11
+	.  reduce 10
+
+
+state 16
+	expr_stmt : test .  (22)
+	expr_stmt : test . EQ test  (23)
+
+	EQ  shift 40
+	NEWLINE  reduce 22
+	PUNTOCOMA  reduce 22
+
+
+state 17
+	simple : auxsimple . PUNTOCOMA NEWLINE  (16)
+	simple : auxsimple . NEWLINE  (17)
+	auxsimple : auxsimple . PUNTOCOMA small_stmt  (19)
+
+	NEWLINE  shift 41
+	PUNTOCOMA  shift 42
+	.  error
+
+
+state 18
+	auxsimple : small_stmt .  (18)
+
+	.  reduce 18
+
+
+state 19
+	small_stmt : expr_stmt .  (20)
+
+	.  reduce 20
+
+
+state 20
+	small_stmt : print_stmt .  (21)
+
+	.  reduce 21
+
+
+state 21
+	test : or_test .  (29)
+	or_test : or_test . OR and_test  (31)
+
+	OR  shift 43
+	COMA  reduce 29
+	NEWLINE  reduce 29
+	EQ  reduce 29
+	DOBLEPUNTO  reduce 29
+	PUNTOCOMA  reduce 29
+
+
+state 22
+	or_test : and_test .  (30)
+	and_test : and_test . AND not_test  (33)
+
+	AND  shift 44
+	COMA  reduce 30
+	NEWLINE  reduce 30
+	OR  reduce 30
+	EQ  reduce 30
+	DOBLEPUNTO  reduce 30
+	PUNTOCOMA  reduce 30
+
+
+state 23
+	and_test : not_test .  (32)
+
+	.  reduce 32
+
+
+state 24
+	not_test : comparison .  (34)
+
+	.  reduce 34
+
+
+state 25
+	comparison : expr .  (35)
+	comparison : expr . auxcomp  (36)
+	expr : expr . ORB xor_expr  (50)
+
+	IN  shift 45
+	LE  shift 46
+	GR  shift 47
+	LEQ  shift 48
+	GRQ  shift 49
+	EQUALS  shift 50
+	DIFF  shift 51
+	ORB  shift 52
+	NOTIN  shift 53
+	ISNOT  shift 54
+	IS  shift 55
+	COMA  reduce 35
+	NEWLINE  reduce 35
+	AND  reduce 35
+	OR  reduce 35
+	EQ  reduce 35
+	DOBLEPUNTO  reduce 35
+	PUNTOCOMA  reduce 35
+
+	auxcomp  goto 56
+	comp_op  goto 57
+
+
+state 26
+	expr : xor_expr .  (49)
+	xor_expr : xor_expr . XOR and_expr  (52)
+
+	XOR  shift 58
+	COMA  reduce 49
+	NEWLINE  reduce 49
+	AND  reduce 49
+	OR  reduce 49
+	IN  reduce 49
+	LE  reduce 49
+	GR  reduce 49
+	LEQ  reduce 49
+	GRQ  reduce 49
+	EQUALS  reduce 49
+	DIFF  reduce 49
+	EQ  reduce 49
+	ORB  reduce 49
+	DOBLEPUNTO  reduce 49
+	PUNTOCOMA  reduce 49
+	NOTIN  reduce 49
+	ISNOT  reduce 49
+	IS  reduce 49
+
+
+state 27
+	xor_expr : and_expr .  (51)
+	and_expr : and_expr . ANDB arith_expr  (54)
+
+	ANDB  shift 59
+	COMA  reduce 51
+	NEWLINE  reduce 51
+	AND  reduce 51
+	OR  reduce 51
+	IN  reduce 51
+	LE  reduce 51
+	GR  reduce 51
+	LEQ  reduce 51
+	GRQ  reduce 51
+	EQUALS  reduce 51
+	DIFF  reduce 51
+	EQ  reduce 51
+	XOR  reduce 51
+	ORB  reduce 51
+	DOBLEPUNTO  reduce 51
+	PUNTOCOMA  reduce 51
+	NOTIN  reduce 51
+	ISNOT  reduce 51
+	IS  reduce 51
+
+
+state 28
+	and_expr : arith_expr .  (53)
+
+	.  reduce 53
+
+
+state 29
+	arith_expr : term .  (55)
+	arith_expr : term . MAS arith_expr  (56)
+	arith_expr : term . MENOS arith_expr  (57)
+
+	MAS  shift 60
+	MENOS  shift 61
+	COMA  reduce 55
+	NEWLINE  reduce 55
+	AND  reduce 55
+	OR  reduce 55
+	IN  reduce 55
+	LE  reduce 55
+	GR  reduce 55
+	LEQ  reduce 55
+	GRQ  reduce 55
+	EQUALS  reduce 55
+	DIFF  reduce 55
+	EQ  reduce 55
+	XOR  reduce 55
+	ANDB  reduce 55
+	ORB  reduce 55
+	DOBLEPUNTO  reduce 55
+	PUNTOCOMA  reduce 55
+	NOTIN  reduce 55
+	ISNOT  reduce 55
+	IS  reduce 55
+
+
+state 30
+	term : factor .  (58)
+	term : factor . POR term  (59)
+	term : factor . DIV term  (60)
+	term : factor . MODULO term  (61)
+	term : factor . DIVENTERA term  (62)
+
+	POR  shift 62
+	DIV  shift 63
+	DIVENTERA  shift 64
+	MODULO  shift 65
+	COMA  reduce 58
+	NEWLINE  reduce 58
+	AND  reduce 58
+	OR  reduce 58
+	IN  reduce 58
+	MAS  reduce 58
+	MENOS  reduce 58
+	LE  reduce 58
+	GR  reduce 58
+	LEQ  reduce 58
+	GRQ  reduce 58
+	EQUALS  reduce 58
+	DIFF  reduce 58
+	EQ  reduce 58
+	XOR  reduce 58
+	ANDB  reduce 58
+	ORB  reduce 58
+	DOBLEPUNTO  reduce 58
+	PUNTOCOMA  reduce 58
+	NOTIN  reduce 58
+	ISNOT  reduce 58
+	IS  reduce 58
+
+
+state 31
+	factor : power .  (65)
+
+	.  reduce 65
+
+
+state 32
+	power : atom .  (66)
+	power : atom . POTENCIA factor  (67)
+
+	POTENCIA  shift 66
+	COMA  reduce 66
+	NEWLINE  reduce 66
+	AND  reduce 66
+	OR  reduce 66
+	IN  reduce 66
+	MAS  reduce 66
+	MENOS  reduce 66
+	POR  reduce 66
+	DIV  reduce 66
+	DIVENTERA  reduce 66
+	MODULO  reduce 66
+	LE  reduce 66
+	GR  reduce 66
+	LEQ  reduce 66
+	GRQ  reduce 66
+	EQUALS  reduce 66
+	DIFF  reduce 66
+	EQ  reduce 66
+	XOR  reduce 66
+	ANDB  reduce 66
+	ORB  reduce 66
+	DOBLEPUNTO  reduce 66
+	PUNTOCOMA  reduce 66
+	NOTIN  reduce 66
+	ISNOT  reduce 66
+	IS  reduce 66
+
+
+state 33
+	while_stmt : WHILE test . DOBLEPUNTO suite  (15)
+
+	DOBLEPUNTO  shift 67
+	.  error
 
 
 state 34
-	arith_expr : term MENOS arith_expr .  (12)
+	if_stmt : IF test . DOBLEPUNTO suite  (11)
+	if_stmt : IF test . DOBLEPUNTO suite auxif  (12)
 
-	.  reduce 12
+	DOBLEPUNTO  shift 68
+	.  error
 
 
 state 35
-	term : factor POR term .  (14)
+	print_stmt : PRINT ">>" . auxprint  (26)
 
-	.  reduce 14
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	test  goto 36
+	auxprint  goto 69
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
 
 
 state 36
-	term : factor DIV term .  (15)
+	auxprint : test .  (27)
 
-	.  reduce 15
+	.  reduce 27
 
 
 state 37
-	term : factor DIVENTERA term .  (17)
+	print_stmt : PRINT auxprint .  (25)
+	auxprint : auxprint . COMA test  (28)
+
+	COMA  shift 70
+	NEWLINE  reduce 25
+	PUNTOCOMA  reduce 25
+
+
+state 38
+	factor : MAS factor .  (63)
+
+	.  reduce 63
+
+
+state 39
+	factor : MENOS factor .  (64)
+
+	.  reduce 64
+
+
+state 40
+	expr_stmt : test EQ . test  (23)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	test  goto 71
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 41
+	simple : auxsimple NEWLINE .  (17)
 
 	.  reduce 17
 
 
-state 38
-	term : factor MODULO term .  (16)
+state 42
+	simple : auxsimple PUNTOCOMA . NEWLINE  (16)
+	auxsimple : auxsimple PUNTOCOMA . small_stmt  (19)
+
+	CADENA  shift 1
+	NEWLINE  shift 72
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	PRINT  shift 7
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	test  goto 16
+	small_stmt  goto 73
+	expr_stmt  goto 19
+	print_stmt  goto 20
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 43
+	or_test : or_test OR . and_test  (31)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	and_test  goto 74
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 44
+	and_test : and_test AND . not_test  (33)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	not_test  goto 75
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 45
+	comp_op : IN .  (45)
+
+	.  reduce 45
+
+
+state 46
+	comp_op : LE .  (39)
+
+	.  reduce 39
+
+
+state 47
+	comp_op : GR .  (40)
+
+	.  reduce 40
+
+
+state 48
+	comp_op : LEQ .  (43)
+
+	.  reduce 43
+
+
+state 49
+	comp_op : GRQ .  (42)
+
+	.  reduce 42
+
+
+state 50
+	comp_op : EQUALS .  (41)
+
+	.  reduce 41
+
+
+state 51
+	comp_op : DIFF .  (44)
+
+	.  reduce 44
+
+
+state 52
+	expr : expr ORB . xor_expr  (50)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	xor_expr  goto 76
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 53
+	comp_op : NOTIN .  (46)
+
+	.  reduce 46
+
+
+state 54
+	comp_op : ISNOT .  (48)
+
+	.  reduce 48
+
+
+state 55
+	comp_op : IS .  (47)
+
+	.  reduce 47
+
+
+state 56
+	comparison : expr auxcomp .  (36)
+	auxcomp : auxcomp . comp_op expr  (38)
+
+	IN  shift 45
+	LE  shift 46
+	GR  shift 47
+	LEQ  shift 48
+	GRQ  shift 49
+	EQUALS  shift 50
+	DIFF  shift 51
+	NOTIN  shift 53
+	ISNOT  shift 54
+	IS  shift 55
+	COMA  reduce 36
+	NEWLINE  reduce 36
+	AND  reduce 36
+	OR  reduce 36
+	EQ  reduce 36
+	DOBLEPUNTO  reduce 36
+	PUNTOCOMA  reduce 36
+
+	comp_op  goto 77
+
+
+state 57
+	auxcomp : comp_op . expr  (37)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	expr  goto 78
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 58
+	xor_expr : xor_expr XOR . and_expr  (52)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	and_expr  goto 79
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 59
+	and_expr : and_expr ANDB . arith_expr  (54)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	arith_expr  goto 80
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 60
+	arith_expr : term MAS . arith_expr  (56)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	arith_expr  goto 81
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 61
+	arith_expr : term MENOS . arith_expr  (57)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	arith_expr  goto 82
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 62
+	term : factor POR . term  (59)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	term  goto 83
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 63
+	term : factor DIV . term  (60)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	term  goto 84
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 64
+	term : factor DIVENTERA . term  (62)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	term  goto 85
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 65
+	term : factor MODULO . term  (61)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	term  goto 86
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 66
+	power : atom POTENCIA . factor  (67)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	factor  goto 87
+	power  goto 31
+	atom  goto 32
+
+
+state 67
+	while_stmt : WHILE test DOBLEPUNTO . suite  (15)
+
+	CADENA  shift 1
+	NEWLINE  shift 88
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	PRINT  shift 7
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	suite  goto 89
+	simple  goto 90
+	test  goto 16
+	auxsimple  goto 17
+	small_stmt  goto 18
+	expr_stmt  goto 19
+	print_stmt  goto 20
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 68
+	if_stmt : IF test DOBLEPUNTO . suite  (11)
+	if_stmt : IF test DOBLEPUNTO . suite auxif  (12)
+
+	CADENA  shift 1
+	NEWLINE  shift 88
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	PRINT  shift 7
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	suite  goto 91
+	simple  goto 90
+	test  goto 16
+	auxsimple  goto 17
+	small_stmt  goto 18
+	expr_stmt  goto 19
+	print_stmt  goto 20
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 69
+	print_stmt : PRINT ">>" auxprint .  (26)
+	auxprint : auxprint . COMA test  (28)
+
+	COMA  shift 70
+	NEWLINE  reduce 26
+	PUNTOCOMA  reduce 26
+
+
+state 70
+	auxprint : auxprint COMA . test  (28)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	test  goto 92
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 71
+	expr_stmt : test EQ test .  (23)
+
+	.  reduce 23
+
+
+state 72
+	simple : auxsimple PUNTOCOMA NEWLINE .  (16)
 
 	.  reduce 16
 
 
-state 39
-	power : atom POTENCIA factor .  (22)
+state 73
+	auxsimple : auxsimple PUNTOCOMA small_stmt .  (19)
 
-	.  reduce 22
+	.  reduce 19
 
 
-state 40
-	expr : test EQ PA test . PC  (4)
+state 74
+	or_test : or_test OR and_test .  (31)
+	and_test : and_test . AND not_test  (33)
 
-	PC  shift 41
+	AND  shift 44
+	COMA  reduce 31
+	NEWLINE  reduce 31
+	OR  reduce 31
+	EQ  reduce 31
+	DOBLEPUNTO  reduce 31
+	PUNTOCOMA  reduce 31
+
+
+state 75
+	and_test : and_test AND not_test .  (33)
+
+	.  reduce 33
+
+
+state 76
+	expr : expr ORB xor_expr .  (50)
+	xor_expr : xor_expr . XOR and_expr  (52)
+
+	XOR  shift 58
+	COMA  reduce 50
+	NEWLINE  reduce 50
+	AND  reduce 50
+	OR  reduce 50
+	IN  reduce 50
+	LE  reduce 50
+	GR  reduce 50
+	LEQ  reduce 50
+	GRQ  reduce 50
+	EQUALS  reduce 50
+	DIFF  reduce 50
+	EQ  reduce 50
+	ORB  reduce 50
+	DOBLEPUNTO  reduce 50
+	PUNTOCOMA  reduce 50
+	NOTIN  reduce 50
+	ISNOT  reduce 50
+	IS  reduce 50
+
+
+state 77
+	auxcomp : auxcomp comp_op . expr  (38)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	expr  goto 93
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 78
+	auxcomp : comp_op expr .  (37)
+	expr : expr . ORB xor_expr  (50)
+
+	ORB  shift 52
+	COMA  reduce 37
+	NEWLINE  reduce 37
+	AND  reduce 37
+	OR  reduce 37
+	IN  reduce 37
+	LE  reduce 37
+	GR  reduce 37
+	LEQ  reduce 37
+	GRQ  reduce 37
+	EQUALS  reduce 37
+	DIFF  reduce 37
+	EQ  reduce 37
+	DOBLEPUNTO  reduce 37
+	PUNTOCOMA  reduce 37
+	NOTIN  reduce 37
+	ISNOT  reduce 37
+	IS  reduce 37
+
+
+state 79
+	xor_expr : xor_expr XOR and_expr .  (52)
+	and_expr : and_expr . ANDB arith_expr  (54)
+
+	ANDB  shift 59
+	COMA  reduce 52
+	NEWLINE  reduce 52
+	AND  reduce 52
+	OR  reduce 52
+	IN  reduce 52
+	LE  reduce 52
+	GR  reduce 52
+	LEQ  reduce 52
+	GRQ  reduce 52
+	EQUALS  reduce 52
+	DIFF  reduce 52
+	EQ  reduce 52
+	XOR  reduce 52
+	ORB  reduce 52
+	DOBLEPUNTO  reduce 52
+	PUNTOCOMA  reduce 52
+	NOTIN  reduce 52
+	ISNOT  reduce 52
+	IS  reduce 52
+
+
+state 80
+	and_expr : and_expr ANDB arith_expr .  (54)
+
+	.  reduce 54
+
+
+state 81
+	arith_expr : term MAS arith_expr .  (56)
+
+	.  reduce 56
+
+
+state 82
+	arith_expr : term MENOS arith_expr .  (57)
+
+	.  reduce 57
+
+
+state 83
+	term : factor POR term .  (59)
+
+	.  reduce 59
+
+
+state 84
+	term : factor DIV term .  (60)
+
+	.  reduce 60
+
+
+state 85
+	term : factor DIVENTERA term .  (62)
+
+	.  reduce 62
+
+
+state 86
+	term : factor MODULO term .  (61)
+
+	.  reduce 61
+
+
+state 87
+	power : atom POTENCIA factor .  (67)
+
+	.  reduce 67
+
+
+state 88
+	suite : NEWLINE . INDENT auxsuite DEDENT  (4)
+
+	INDENT  shift 94
 	.  error
 
 
-state 41
-	expr : test EQ PA test PC .  (4)
+state 89
+	while_stmt : WHILE test DOBLEPUNTO suite .  (15)
+
+	.  reduce 15
+
+
+state 90
+	suite : simple .  (3)
+
+	.  reduce 3
+
+
+state 91
+	if_stmt : IF test DOBLEPUNTO suite .  (11)
+	if_stmt : IF test DOBLEPUNTO suite . auxif  (12)
+
+	ELIF  shift 95
+	$end  reduce 11
+	CADENA  reduce 11
+	IDENTIFIER  reduce 11
+	ENTERO  reduce 11
+	REAL  reduce 11
+	DEDENT  reduce 11
+	WHILE  reduce 11
+	IF  reduce 11
+	PRINT  reduce 11
+	MAS  reduce 11
+	MENOS  reduce 11
+
+	auxif  goto 96
+
+
+state 92
+	auxprint : auxprint COMA test .  (28)
+
+	.  reduce 28
+
+
+state 93
+	auxcomp : auxcomp comp_op expr .  (38)
+	expr : expr . ORB xor_expr  (50)
+
+	ORB  shift 52
+	COMA  reduce 38
+	NEWLINE  reduce 38
+	AND  reduce 38
+	OR  reduce 38
+	IN  reduce 38
+	LE  reduce 38
+	GR  reduce 38
+	LEQ  reduce 38
+	GRQ  reduce 38
+	EQUALS  reduce 38
+	DIFF  reduce 38
+	EQ  reduce 38
+	DOBLEPUNTO  reduce 38
+	PUNTOCOMA  reduce 38
+	NOTIN  reduce 38
+	ISNOT  reduce 38
+	IS  reduce 38
+
+
+state 94
+	suite : NEWLINE INDENT . auxsuite DEDENT  (4)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	WHILE  shift 5
+	IF  shift 6
+	PRINT  shift 7
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	stmt  goto 97
+	simple  goto 12
+	auxsuite  goto 98
+	compound_stmt  goto 13
+	if_stmt  goto 14
+	while_stmt  goto 15
+	test  goto 16
+	auxsimple  goto 17
+	small_stmt  goto 18
+	expr_stmt  goto 19
+	print_stmt  goto 20
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 95
+	auxif : ELIF . test DOBLEPUNTO suite  (13)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	test  goto 99
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 96
+	if_stmt : IF test DOBLEPUNTO suite auxif .  (12)
+	auxif : auxif . ELIF test DOBLEPUNTO suite  (14)
+
+	ELIF  shift 100
+	$end  reduce 12
+	CADENA  reduce 12
+	IDENTIFIER  reduce 12
+	ENTERO  reduce 12
+	REAL  reduce 12
+	DEDENT  reduce 12
+	WHILE  reduce 12
+	IF  reduce 12
+	PRINT  reduce 12
+	MAS  reduce 12
+	MENOS  reduce 12
+
+
+state 97
+	auxsuite : stmt .  (5)
+
+	.  reduce 5
+
+
+state 98
+	suite : NEWLINE INDENT auxsuite . DEDENT  (4)
+	auxsuite : auxsuite . stmt  (6)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	DEDENT  shift 101
+	WHILE  shift 5
+	IF  shift 6
+	PRINT  shift 7
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	stmt  goto 102
+	simple  goto 12
+	compound_stmt  goto 13
+	if_stmt  goto 14
+	while_stmt  goto 15
+	test  goto 16
+	auxsimple  goto 17
+	small_stmt  goto 18
+	expr_stmt  goto 19
+	print_stmt  goto 20
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 99
+	auxif : ELIF test . DOBLEPUNTO suite  (13)
+
+	DOBLEPUNTO  shift 103
+	.  error
+
+
+state 100
+	auxif : auxif ELIF . test DOBLEPUNTO suite  (14)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	test  goto 104
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 101
+	suite : NEWLINE INDENT auxsuite DEDENT .  (4)
 
 	.  reduce 4
 
 
-45 terminals, 11 nonterminals
-27 grammar rules, 42 states
+state 102
+	auxsuite : auxsuite stmt .  (6)
+
+	.  reduce 6
+
+
+state 103
+	auxif : ELIF test DOBLEPUNTO . suite  (13)
+
+	CADENA  shift 1
+	NEWLINE  shift 88
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	PRINT  shift 7
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	suite  goto 105
+	simple  goto 90
+	test  goto 16
+	auxsimple  goto 17
+	small_stmt  goto 18
+	expr_stmt  goto 19
+	print_stmt  goto 20
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 104
+	auxif : auxif ELIF test . DOBLEPUNTO suite  (14)
+
+	DOBLEPUNTO  shift 106
+	.  error
+
+
+state 105
+	auxif : ELIF test DOBLEPUNTO suite .  (13)
+
+	.  reduce 13
+
+
+state 106
+	auxif : auxif ELIF test DOBLEPUNTO . suite  (14)
+
+	CADENA  shift 1
+	NEWLINE  shift 88
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	PRINT  shift 7
+	MAS  shift 8
+	MENOS  shift 9
+	.  error
+
+	suite  goto 107
+	simple  goto 90
+	test  goto 16
+	auxsimple  goto 17
+	small_stmt  goto 18
+	expr_stmt  goto 19
+	print_stmt  goto 20
+	or_test  goto 21
+	and_test  goto 22
+	not_test  goto 23
+	comparison  goto 24
+	expr  goto 25
+	xor_expr  goto 26
+	and_expr  goto 27
+	arith_expr  goto 28
+	term  goto 29
+	factor  goto 30
+	power  goto 31
+	atom  goto 32
+
+
+state 107
+	auxif : auxif ELIF test DOBLEPUNTO suite .  (14)
+
+	.  reduce 14
+
+
+50 terminals, 30 nonterminals
+72 grammar rules, 108 states

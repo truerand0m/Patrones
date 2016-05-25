@@ -1,0 +1,381 @@
+   0  $accept : fi $end
+
+   1  fi :
+   2     | term NE
+   WLINE
+
+   3  term : factor
+   4       | factor auxterm
+
+   5  auxterm : POR factor
+   6          | DIV factor
+   7          | MODULO factor
+   8          | DIVENTERA factor
+   9          | auxterm POR factor
+  10          | auxterm DIV factor
+  11          | auxterm MODULO factor
+  12          | auxterm DIVENTERA factor
+
+  13  factor : MAS factor
+  14         | MENOS factor
+  15         | power
+
+  16  power : atom
+  17        | atom POTENCIA factor
+
+  18  atom : CADENA
+  19       | ENTERO
+  20       | REAL
+  21       | IDENTIFIER
+
+state 0
+	$accept : . fi $end  (0)
+	fi : .  (1)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	$end  reduce 1
+
+	fi  goto 7
+	term  goto 8
+	factor  goto 9
+	power  goto 10
+	atom  goto 11
+
+
+state 1
+	atom : CADENA .  (18)
+
+	.  reduce 18
+
+
+state 2
+	atom : ENTERO .  (19)
+
+	.  reduce 19
+
+
+state 3
+	atom : IDENTIFIER .  (21)
+
+	.  reduce 21
+
+
+state 4
+	atom : REAL .  (20)
+
+	.  reduce 20
+
+
+state 5
+	factor : MAS . factor  (13)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 12
+	power  goto 10
+	atom  goto 11
+
+
+state 6
+	factor : MENOS . factor  (14)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 13
+	power  goto 10
+	atom  goto 11
+
+
+state 7
+	$accept : fi . $end  (0)
+
+	$end  accept
+
+
+state 8
+	fi : term . NEWLINE  (2)
+
+	NEWLINE  shift 14
+	.  error
+
+
+state 9
+	term : factor .  (3)
+	term : factor . auxterm  (4)
+
+	DIV  shift 15
+	POR  shift 16
+	MODULO  shift 17
+	DIVENTERA  shift 18
+	NEWLINE  reduce 3
+
+	auxterm  goto 19
+
+
+state 10
+	factor : power .  (15)
+
+	.  reduce 15
+
+
+state 11
+	power : atom .  (16)
+	power : atom . POTENCIA factor  (17)
+
+	POTENCIA  shift 20
+	NEWLINE  reduce 16
+	DIV  reduce 16
+	POR  reduce 16
+	MODULO  reduce 16
+	DIVENTERA  reduce 16
+
+
+state 12
+	factor : MAS factor .  (13)
+
+	.  reduce 13
+
+
+state 13
+	factor : MENOS factor .  (14)
+
+	.  reduce 14
+
+
+state 14
+	fi : term NEWLINE .  (2)
+
+	.  reduce 2
+
+
+state 15
+	auxterm : DIV . factor  (6)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 21
+	power  goto 10
+	atom  goto 11
+
+
+state 16
+	auxterm : POR . factor  (5)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 22
+	power  goto 10
+	atom  goto 11
+
+
+state 17
+	auxterm : MODULO . factor  (7)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 23
+	power  goto 10
+	atom  goto 11
+
+
+state 18
+	auxterm : DIVENTERA . factor  (8)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 24
+	power  goto 10
+	atom  goto 11
+
+
+state 19
+	term : factor auxterm .  (4)
+	auxterm : auxterm . POR factor  (9)
+	auxterm : auxterm . DIV factor  (10)
+	auxterm : auxterm . MODULO factor  (11)
+	auxterm : auxterm . DIVENTERA factor  (12)
+
+	DIV  shift 25
+	POR  shift 26
+	MODULO  shift 27
+	DIVENTERA  shift 28
+	NEWLINE  reduce 4
+
+
+state 20
+	power : atom POTENCIA . factor  (17)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 29
+	power  goto 10
+	atom  goto 11
+
+
+state 21
+	auxterm : DIV factor .  (6)
+
+	.  reduce 6
+
+
+state 22
+	auxterm : POR factor .  (5)
+
+	.  reduce 5
+
+
+state 23
+	auxterm : MODULO factor .  (7)
+
+	.  reduce 7
+
+
+state 24
+	auxterm : DIVENTERA factor .  (8)
+
+	.  reduce 8
+
+
+state 25
+	auxterm : auxterm DIV . factor  (10)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 30
+	power  goto 10
+	atom  goto 11
+
+
+state 26
+	auxterm : auxterm POR . factor  (9)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 31
+	power  goto 10
+	atom  goto 11
+
+
+state 27
+	auxterm : auxterm MODULO . factor  (11)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 32
+	power  goto 10
+	atom  goto 11
+
+
+state 28
+	auxterm : auxterm DIVENTERA . factor  (12)
+
+	CADENA  shift 1
+	ENTERO  shift 2
+	IDENTIFIER  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 33
+	power  goto 10
+	atom  goto 11
+
+
+state 29
+	power : atom POTENCIA factor .  (17)
+
+	.  reduce 17
+
+
+state 30
+	auxterm : auxterm DIV factor .  (10)
+
+	.  reduce 10
+
+
+state 31
+	auxterm : auxterm POR factor .  (9)
+
+	.  reduce 9
+
+
+state 32
+	auxterm : auxterm MODULO factor .  (11)
+
+	.  reduce 11
+
+
+state 33
+	auxterm : auxterm DIVENTERA factor .  (12)
+
+	.  reduce 12
+
+
+57 terminals, 7 nonterminals
+22 grammar rules, 34 states

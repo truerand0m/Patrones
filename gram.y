@@ -1,0 +1,108 @@
+%{
+  import java.lang.Math;
+  import java.io.*;
+%}
+/* YACC Declarations */
+%token CADENA ENTERO IDENTIFIER REAL
+%token NEWLINE ENDMARKER
+%token IF ELIF WHILE FOR
+%token DEDENT INDENT
+%token OR AND NOT
+%token MULT DIV PORC DIVI POR MODULO DIVENTERA
+%token MAS MENOS
+%token NAME INTEGER STRING FLOAT
+%token POTENCIA
+%token PC PA DOBLEPUNTO PUNTOCOMA COMA
+/* "<" ">" "<=" ">=" "==" "!=" "=" */
+%token LE GR LEQ GRQ EQUALS DIFF EQ
+/* "^" "&" "|" "and" "not in" "is not" "is" "not"  */
+%token XOR ANDB ORB AND NOTIN ISNOT IS NOT IN
+%token PRINT DEF BOOLEAN ELSE FROM RETURN AS
+/* GRAMMAR FOLLOWS */
+%%
+
+fi:
+   | term  NEWLINE {
+               Visitor v = new PrintVisitor();
+               System.out.println("Llegue a input");
+               System.out.println("*****************************");
+               System.out.println("------------Accept-----------");
+               $1.accept(v);
+               System.out.println("------------Print-----------");
+               //$1.print();
+               Printer p = new Printer($1);
+               p.print();
+               System.out.println("*****************************");
+            }
+   ;
+/*
+file_input: ENDMARKER
+			|	NEWLINE file_input
+			|  stmt file_input
+			;
+*/
+
+term:		factor           { $$ = $1; }
+		|	factor auxterm {
+                           $$ = new TermNode($1,$2);
+                        }
+		;
+
+
+auxterm:	POR factor             { $$ = new AuxTermNode(EnumOp.POR,$2); }
+		|	DIV	 factor          { $$ = new AuxTermNode(EnumOp.DIV,$2); }
+		|	MODULO factor          { $$ = new AuxTermNode(EnumOp.MODULO,$2); }
+		|	DIVENTERA factor       { $$ = new AuxTermNode(EnumOp.DIVENTERA,$2); }
+		|	auxterm POR factor     { $1.addChild(new AuxTermNode(EnumOp.POR,$3)); }
+		|	auxterm DIV factor     { $1.addChild(new AuxTermNode(EnumOp.POR,$3)); }
+		|	auxterm MODULO factor  { $1.addChild(new AuxTermNode(EnumOp.MODULO,$3)); }
+		|	auxterm DIVENTERA factor  { $1.addChild(new AuxTermNode(EnumOp.DIVENTERA ,$3)); }
+		;
+
+factor:	MAS factor    { $$=new FactorNode(EnumOp.MAS,$2); }
+		|	MENOS factor  { $$=new FactorNode(EnumOp.MENOS,$2); }
+		|	power         { $$=$1; }
+		;
+
+power:	atom                   { $$=$1;}
+		|	atom POTENCIA factor   { $$=new PowerNode($1,$2);}
+		;
+
+atom:   CADENA            {$$ = $1;}
+      | ENTERO            {$$ = $1;}
+      | REAL              {$$ = $1;}
+      | IDENTIFIER        {$$ = $1;}
+      ;
+
+%%
+/* a reference to the lexer object */
+private Flexer lexer;
+
+/* interface to the lexer */
+private int yylex () {
+    int yyl_return = -1;
+    try {
+      yyl_return = lexer.yylex();
+    }
+    catch (IOException e) {
+      System.err.println("IO error :"+e);
+    }
+    return yyl_return;
+}
+
+/* error reporting */
+public void yyerror (String error) {
+    System.err.println ("Error: " + error);
+}
+
+/* lexer is created in the constructor */
+public Parser(Reader r) {
+    lexer = new Flexer(r, this);
+    yydebug = true;
+}
+
+/* that's how you use the parser */
+public static void main(String args[]) throws IOException {
+    Parser yyparser = new Parser(new FileReader(args[0]));
+    yyparser.yyparse();
+}

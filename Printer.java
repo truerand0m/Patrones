@@ -14,7 +14,32 @@ public class Printer{
    }
 
    public void print(){
-      levelOrderQueue(node);
+      String s = ""+node.getClass();
+      if(s.equals("class SStmtNode")){
+         //System.out.println("SStmtNode detected! ");
+         //return;
+         for(int i=0;i<node.getNodos().size();i++){
+            print(node.getNodos().get(i));
+         }
+      }else{
+         levelOrderQueue(node);
+      }
+   }
+
+   // hacer un solo metodo
+   public void print(Node node){
+      String s = ""+node.getClass();
+      if(s.equals("class SStmtNode")){
+         //System.out.println("SStmtNode detected! ");
+         //return;
+         for(int i=0;i<node.getNodos().size();i++){
+            System.out.println("-------------------");
+            print(node.getNodos().get(i));
+            System.out.println("-------------------");
+         }
+      }else{
+         levelOrderQueue(node);
+      }
    }
 
    public String fixLength(String s){

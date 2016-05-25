@@ -112,8 +112,8 @@ BOOLEAN		      =	("True" | "False")
                         }
 }
 <NORMAL>{
+  ","                  { return Parser.COMA; }
   \"					      {yybegin(CADENA); }
-  /* ({NNDIGIT} | {CERO})"."{DIGIT}+ */
       {NNDIGIT} ({NNDIGIT} | {CERO})*  "." {DIGIT}+
   |   {CERO}   "." {DIGIT}+
                         {
@@ -148,6 +148,9 @@ BOOLEAN		      =	("True" | "False")
 {BOOLEAN}			      { return Parser.BOOLEAN;}
   "and"                 { return Parser.AND;}
   "from"			         { return Parser.FROM;}
+  "not in"              { return Parser.NOTIN; }
+  "is not"              { return Parser.ISNOT; }
+  "is"                  { return Parser.IS; }
   "not"				      { return Parser.NOT;}
   "while"			      { return Parser.WHILE;}
   "for"				      { return Parser.FOR;}
@@ -160,9 +163,9 @@ BOOLEAN		      =	("True" | "False")
   "print"				   { return Parser.PRINT;}
   "return"				   { return Parser.RETURN;}
   "in"					   { return Parser.IN;}
-  /* {IDENTIFIER}          { return Parser.IDENTIFIER;   } */
   {IDENTIFIER}          {
-                           yyparser.yylval = new IdentifierLeaf(yytext());
+                           cadena = yytext();
+                           yyparser.yylval = new IdentifierLeaf(cadena);
                            return Parser.IDENTIFIER;
                         }
 

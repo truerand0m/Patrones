@@ -1,0 +1,34 @@
+print_stmt: 'print'  (
+                        [ test (',' test)* [','] ]
+                     | '>>' test [ (',' test)+ [','] ]
+                     )
+
+[R1] print_stmt: 'print' [ test (',' test)* [','] ]
+print_stmt: 'print'
+print_stmt: 'print'  test (',' test)*
+print_stmt: 'print'  test (',' test)* ','
+
+[R2] print_stmt: 'print' '>>' test [ (',' test)+ [','] ]
+print_stmt: 'print' '>>' test
+print_stmt: 'print' '>>' test  (',' test)+
+print_stmt: 'print' '>>' test  (',' test)+ ','
+
+Entonces:
+print_stmt: 'print'
+   | 'print'  test (',' test)*
+   | 'print'  test (',' test)* ','
+   | 'print' '>>' test
+   | 'print' '>>' test  (',' test)+
+   | 'print' '>>' test  (',' test)+ ','
+
+print_stmt: print
+         |  print auxprint
+         |  print >> auxprint ','
+
+
+donde auxprint es (, test) +
+auxprint:   test { $$ =$1; }
+         |  auxprint ',' test {
+                                 $1.addChild($3);
+                                 $$ = $1;
+                              }

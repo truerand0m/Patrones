@@ -11,6 +11,16 @@ public class EnumOp{
    public static final int DIV = 5;
    public static final int DIVENTERA = 6;
    public static final int MODULO = 7;
+   public static final int LE = 8;
+   public static final int GR = 9;
+   public static final int EQUALS = 10;
+   public static final int GRQ = 11;
+   public static final int LEQ = 12;
+   public static final int DIFF = 13;
+   public static final int IN = 14;
+   public static final int NOTIN = 15;
+   public static final int IS = 16;
+   public static final int ISNOT = 17;
 
    static String getSymbol(int n){
       switch(n){
@@ -28,6 +38,27 @@ public class EnumOp{
             return "//";
          case 7:
             return "%";
+         //
+         case 8:
+            return "<";
+         case 9:
+            return ">";
+         case 10:
+            return "==";
+         case 11:
+            return ">=";
+         case 12:
+            return "<=";
+         case 13:
+            return "!=";
+         case 14:
+            return "IN";
+         case 15:
+            return "NOTIN";
+         case 16:
+            return "IS";
+         case 17:
+            return "ISNOT";
          default:
             return "?";
       }

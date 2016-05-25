@@ -1,0 +1,72 @@
+java Parser primeraPrac.py
+loop
+yyn:0  state:0  yychar:-1
+ next yychar:279
+state 0, shifting to state 5
+loop
+yyn:0  state:5  yychar:-1
+ next yychar:258
+state 5, shifting to state 2
+loop
+state 2, reducing 1 by rule 19 (atom : ENTERO)
+reduce
+after reduction, shifting from state 5 to state 11
+loop
+yyn:0  state:11  yychar:-1
+ next yychar:276
+reduce
+state 11, reducing 1 by rule 16 (power : atom)
+reduce
+after reduction, shifting from state 5 to state 10
+loop
+state 10, reducing 1 by rule 15 (factor : power)
+reduce
+after reduction, shifting from state 5 to state 12
+loop
+state 12, reducing 2 by rule 13 (factor : MAS factor)
+reduce
+after reduction, shifting from state 0 to state 9
+loop
+yyn:0  state:9  yychar:276
+state 9, shifting to state 16
+loop
+yyn:0  state:16  yychar:-1
+ next yychar:258
+state 16, shifting to state 2
+loop
+state 2, reducing 1 by rule 19 (atom : ENTERO)
+reduce
+after reduction, shifting from state 16 to state 11
+loop
+yyn:0  state:11  yychar:-1
+ next yychar:285
+state 11, shifting to state 20
+loop
+yyn:0  state:20  yychar:-1
+ next yychar:258
+state 20, shifting to state 2
+loop
+state 2, reducing 1 by rule 19 (atom : ENTERO)
+reduce
+after reduction, shifting from state 20 to state 11
+loop
+yyn:0  state:11  yychar:-1
+ next yychar:261
+reduce
+state 11, reducing 1 by rule 16 (power : atom)
+reduce
+after reduction, shifting from state 20 to state 10
+loop
+state 10, reducing 1 by rule 15 (factor : power)
+reduce
+after reduction, shifting from state 20 to state 29
+loop
+state 29, reducing 3 by rule 17 (power : atom POTENCIA factor)
+reduce
+after reduction, shifting from state 16 to state 10
+loop
+state 10, reducing 1 by rule 15 (factor : power)
+reduce
+after reduction, shifting from state 16 to state 22
+loop
+state 22, reducing 2 by rule 5 (auxterm : POR factor)

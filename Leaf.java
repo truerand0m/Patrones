@@ -22,7 +22,7 @@ class StringLeaf extends Leaf
    }
 
    public void print(){
-      System.out.println("Soy hoja cadena: "+this.getClass()+" : "+this.value);
+      System.out.println("Soy hoja cadena::"+this.value.sval);
    }
 
    public String imprime(){
