@@ -1,7 +1,32 @@
 %{
   import java.lang.Math;
   import java.io.*;
+  import java.util.*;
 %}
+/* ----------------------------------------------------------------------
+   For the latest version  visit: https://github.com/truerand0m
+   Also, if you are using linux replace java -jar "dir\jflex" by jflex 
+   ----------------------------------------------------------------------
+*/
+/*
+ISSUE:
+[] NO RECONOCE NUMEROS de la forma ND . ceros
+[] Si la cadena tiene como subcadena un . ,el reconocimiento falla:
+ie "yo no soy 3.1416loto";                      SOLVED 
+                                                agregar "." en CHARLITERAL
+
+[] Si la cadena tiene una comilla simple, regresa la subcadena
+   iniciando despues de la comilla simple.
+
+[] NO Reconoce numeros de la forma 1{0-9}*;
+ie digitonocero con algun cero                  SOLVED
+
+[] Ver si se conserva la precedencia de operaciones PARECE QUE SI xD
+[] Verificar porque no funciona elif            SOLVED
+[] Ver porque no funciona la anidacion       
+[] el while solo funciona si el cuerpo esta en la misma linea
+*/
+
 /* YACC Declarations */
 %token CADENA COMA
 %token NEWLINE IDENTIFIER ENTERO REAL
@@ -20,29 +45,42 @@
 %token XOR ANDB ORB AND NOTIN ISNOT IS NOT
 /* Grammar follows */
 %%
-/*
-   Hace falta ver porque no regresa los identificadores como nodo,
-   terminar hasta aqui, la gramatica y hacer pruebas
-*/
+
 input:
-      | stmt {
+      | auxsuite {
             Visitor v = new PrintVisitor();
             System.out.println("Llegue a input");
             System.out.println("*****************************");
             System.out.println("------------Accept-----------");
+            //exp
+            /*
+            for(int i=0;i<$1.getNodos().size();i++){
+               System.out.println("||||||||||||||||||||||||||||||||||||||||");
+               $1.getNodos().get(i).accept(v);
+               System.out.println("||||||||||||||||||||||||||||||||||||||||");
+            }
+            */
             $1.accept(v);
+            Printer p = new Printer($1);
+            p.print();
+            /*
             System.out.println("------------Print-----------");
             //$1.print();
             Printer p = new Printer($1);
             p.print();
             System.out.println("*****************************");
+            */
       }
       ;
+/* stmt + */
+fi:   NEWLINE
+   |  stmt  {$$ = new Lista($1);}
+   |  fi stmt  { $1.addChild($2); }
+   ;
 
-//
 /* suite: simple_stmt | NEWLINE INDENT stmt+ DEDENT */
 suite:   simple  { $$ = $1; }
-      |  NEWLINE INDENT auxsuite DEDENT
+      |  NEWLINE INDENT auxsuite DEDENT { $$=$3; }
       ;
 
 /* auxsuite es stmt+ */
@@ -61,45 +99,53 @@ compound_stmt: if_stmt     { $$=$1; }
             |  while_stmt  { $$=$1; }
             ;
 
-
-if_stmt: IF test DOBLEPUNTO suite { new IfNode($1,$4); }
+if_stmt: IF test DOBLEPUNTO suite { $$ = new IFNodeMejorado($2,$4); }
       |  IF test DOBLEPUNTO suite auxif {
-                                          $$ = new IfNode($2,$4);
-                                          $1.addChild($5);
-                                       }
+                                          $$ = new IFNodeMejorado($2,$4);
+                                          ArrayList<Node> nodos = $5.getNodos();
+                                          if(nodos.size()>0)
+                                             $$.addChilds(nodos);
+                                       } 
       ;
-
-auxif:   ELIF test DOBLEPUNTO suite        { $$ = new IfNode($2,$4); }
-      |  auxif ELIF test DOBLEPUNTO suite  { $1.addChild(new IfNode($3,$5)); }
+/* 
+   ELIF tiene que tener una lista para ir agregando ahi los nodos ,
+   una vez que auxif es reducida totalmente, tomo la lista de 
+   nodos y la agrego al nodo if node o algo asi.
+*/
+auxif:   ELIF test DOBLEPUNTO suite        { $$ = new ElifNode($2,$4); }
+      |  auxif ELIF test DOBLEPUNTO suite  { $1.addChild(new SingleElifNode($3,$5)); }
       ;
+      
 
-while_stmt: WHILE test DOBLEPUNTO suite {$$ = new WhileNode($2,$4); }
+
+while_stmt: WHILE test DOBLEPUNTO suite  {$$ = new WhileNode($2,$4); }
           ;
 
 /* simple_stmt: small_stmt (';' small_stmt)* [';'] NEWLINE */
 simple:  auxsimple PUNTOCOMA NEWLINE   {  $$ = $1; }
       |  auxsimple NEWLINE             {  $$ = $1; }
 
-
+/* CHECK */
 auxsimple:     small_stmt                       {  $$ = new SStmtNode($1); }
             |  auxsimple PUNTOCOMA small_stmt   {
                                                    $1.addChild($3);
                                                    $$ = $1;
                                                 }
-
-small_stmt: expr_stmt { $$ = $1; }
+small_stmt: expr_stmt  { $$ = $1; }
          |  print_stmt { $$ = $1; }
          ;
 
-expr_stmt:    test { $$ = $1; }
-      |  test   EQ  test  { $$ = new EXPRN($1,$3);}
+expr_stmt:  test            { $$ = $1; }
+      |     test  EQ  test  { $$ = new EXPRN($1,$3);}
       ;
 
+/* Duda: esto debo tratarlo como una lista */
 print_stmt: PRINT                 { $$ = new PrintNode(); }
          |  PRINT auxprint        { $$ = $2; }
          |  PRINT '>>' auxprint   { $$ = $3; }
          ;
-
+         
+/* CHECK */
 auxprint:   test              { $$=new PrintNode($1); }
          |  auxprint COMA test{
                                  $1.addChild($3);
@@ -110,34 +156,61 @@ auxprint:   test              { $$=new PrintNode($1); }
 /* test: or_test */
 test: or_test  { $$ = $1; }
     ;
+
 /* or_test: and_test ('or' and_test)est */
 or_test: and_test { $$ = $1; }
       |  or_test OR and_test { $$ = new OrNode($1,$3); }
       ;
+
 /* falta el otro and, and_test */
+/* CHECK */
 and_test:   not_test             { $$=$1; }
          |  and_test AND not_test {
                                     /* Posible error */
+                                    /*
                                     $1.addChild($3);
                                     $$ = $1;
+                                    */
+                                    /* 
+                                       Duda: como se hasta que parte bajar
+                                       del Arbol
+                                    */
+                                    $$ = new AndNode($1,$3);
                                  }
          ;
+
 /* falta el not not_test */
-not_test: comparison { $$= $1; }
+not_test:   NOT not_test   { $$= new NotNode($2); }
+         |  comparison     { $$= $1; }
 
 /* faltan reglas {} */
-comparison: expr { $$=$1; }
-         |  expr auxcomp
-         ;
+/* CHECK Asociativy */
+comparison: expr              { $$ = $1; }
+   |  expr LE comparison      { $$ = new CmpNode($1,EnumOp.LE,$3); }
+   |  expr GR comparison      { $$ = new CmpNode($1,EnumOp.GR,$3); }
+   |  expr EQUALS comparison  { $$ = new CmpNode($1,EnumOp.EQUALS,$3); }
+   |  expr GRQ comparison     { $$ = new CmpNode($1,EnumOp.GRQ,$3); }
+   |  expr LEQ comparison     { $$ = new CmpNode($1,EnumOp.LEQ,$3); }
+   |  expr DIFF comparison    { $$ = new CmpNode($1,EnumOp.DIFF,$3); }
+   |  expr IN comparison      { $$ = new CmpNode($1,EnumOp.IN,$3); }
+   |  expr NOTIN comparison   { $$ = new CmpNode($1,EnumOp.NOTIN,$3); }
+   |  expr IS comparison      { $$ = new CmpNode($1,EnumOp.IS,$3); }
+   |  expr ISNOT comparison   { $$ = new CmpNode($1,EnumOp.ISNOT,$3); }
+   ;
 
+/*
+comparison: expr { $$=$1; }
+         |  expr auxcomp {}
+         ;
 auxcomp: comp_op expr
       |  auxcomp comp_op expr
       ;
-
 comp_op: LE | GR | EQUALS | GRQ | LEQ
       |  DIFF | IN | NOTIN | IS | ISNOT
       ;
+*/
 
+/* CHECK Asociativity */
 expr:    xor_expr           { $$= $1;}
       |  expr ORB xor_expr { $$ = new ExprNode($1,$3);}
       ;
@@ -147,7 +220,8 @@ xor_expr:   and_expr                { $$=$1; }
          ;
 
 /* and_expr: arith_expr ('&' arith_expr) */
-and_expr:   arith_expr { $$ = $1; }
+/* FALTA ESTE NODO */
+and_expr:   arith_expr               { $$ = $1; }
          |  and_expr ANDB arith_expr { $$ = new AndNode($1,$3); }
          ;
 
@@ -156,18 +230,21 @@ arith_expr: term { $$ = $1; }
          |  term MAS arith_expr { $$ = new ArithNode($1,EnumOp.MAS,$3);}
          |  term MENOS arith_expr { $$ = new ArithNode($1,EnumOp.MENOS,$3); }
          ;
+
 /* term: factor (('*'|'/'|'%'|'//') factor)* */
 term: factor               { $$ = $1; }
    |  factor POR term      { $$ = new TermNodeX($1,EnumOp.POR,$3); }
    |  factor DIV term      { $$ = new TermNodeX($1,EnumOp.DIV,$3); }
-   |  factor MODULO term      { $$ = new TermNodeX($1,EnumOp.MODULO,$3); }
-   |  factor DIVENTERA term      { $$ = new TermNodeX($1,EnumOp.DIVENTERA,$3); }
+   |  factor MODULO term   { $$ = new TermNodeX($1,EnumOp.MODULO,$3); }
+   |  factor DIVENTERA term { $$ = new TermNodeX($1,EnumOp.DIVENTERA,$3); }
    ;
+
 /*    ('+'|'-') factor | power   */
 factor:  MAS factor { $$ = new FactorNode(EnumOp.MAS,$2); }
       |  MENOS factor  { $$ = new FactorNode(EnumOp.MENOS,$2); }
       |  power { $$ = $1; }
       ;
+
 /* power: atom ['**' factor] */
 power:   atom                    { $$ = $1; }
       |  atom POTENCIA factor    { $$ = new PowerNode($1,$3); }
@@ -179,6 +256,23 @@ atom:   CADENA            {$$ = $1;}
       | REAL              {$$ = $1;}
       | IDENTIFIER        {$$ = $1;}
 ;
+
+/* REGLAS ANTERIORES */
+/*
+if_stmt: IF test DOBLEPUNTO suite { $$ = new IFNodeMejorado($2,$4); }
+      |  IF test DOBLEPUNTO suite auxif {
+                                          $$ = new IFNodeMejorado($2,$4);
+                                          $$.addChild($5);
+                                          //$1.addChild($5);
+                                       }
+      ;
+*/
+/*
+auxif:   ELIF test DOBLEPUNTO suite        { $$ = new IfNode($2,$4); }
+      |  ELIF test DOBLEPUNTO suite auxif { $1.addChild(new IfNode($3,$5)); }
+      ;
+*/
+
 %%
 /* a reference to the lexer object */
 private Flexer lexer;

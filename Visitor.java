@@ -15,11 +15,16 @@ public interface Visitor{
    public void visit(StmtNode n);
    public void visit(WhileNode n);
    public void visit(IfNode n);
+   public void visit(IFNodeMejorado n);
+   public void visit(ElifNode n);
    public void visit(XorNode n);
    /* New Nodes */
    public void visit(AuxTermNode n);
    public void visit(TermNode n);
    public void visit(PrintNode n);
+   public void visit(NotNode n);
+   public void visit(CmpNode n);
+   public void visit(SingleElifNode n);
 }
 
 class PrintVisitor implements Visitor{
@@ -153,20 +158,7 @@ class PrintVisitor implements Visitor{
 
    public void visit(IfNode n){
       System.out.println("Soy nodo IFNode:");
-      //System.out.println(n.node.imprime());
-
-      /*
-      System.out.println("Nodos hijos: "+n.nodos.size());
-      String temp = "";
-      System.out.println("[");
-      for(int i = 0; i< n.nodos.size(); i++){
-         Node nn = n.nodos.get(i);
-         //System.out.println(nn.imprime());
-         nn.print();
-         //temp+= "\n"+n.nodos.get(i).imprime();
-      }
-      System.out.println("]");
-      */
+      n.print();
    }
 
    public void visit(EXPRN n){
@@ -186,5 +178,25 @@ class PrintVisitor implements Visitor{
       n.print();
    }
 
+   public void visit(NotNode n){
+      n.print();
+   }
+
+   public void visit(CmpNode n){
+      n.print();
+   }
+
+   public void visit(IFNodeMejorado n){
+      System.out.print("IfMejorado");
+      n.print();
+   }
    
+   public void visit(ElifNode n){
+      System.out.print("ELIF");
+      n.print();
+   }
+   
+   public void visit(SingleElifNode n){
+      n.print();
+   }
 }

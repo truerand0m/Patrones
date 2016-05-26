@@ -1,6 +1,11 @@
 /** Componente. The generic Node class. */
 import java.util.ArrayList;
-
+/*
+   2DO:
+      Check If visitor;
+      Check Print Visitor;
+      Check SStmtNode hijos;
+*/
 public class Node extends Object{
    Children childrenNodes;
    ParserVal value;
@@ -15,9 +20,12 @@ public class Node extends Object{
 
    /* Added */
    public ArrayList<Node> getNodos(){ return null; }
-
+   /* added */
+   public void addChilds(ArrayList<Node> nodes){}
    /* added */
    public void addChild(Node n){}
+   /* added */
+   public Node getChild(){ return null; }
 
    public Node getLeftChild(){ return null; }
 
@@ -58,6 +66,22 @@ class EmptyNode extends Node{
 class EndNode extends Node{
    public String imprime(){
       return "";
+   }
+}
+
+// I dont know what im doing
+class Lista extends Node{
+   public Lista(Node n){
+      this.nodos = new ArrayList<Node>();
+      nodos.add(n);
+   }
+
+   public void addChild(Node n){
+      nodos.add(n);
+   }
+
+   public ArrayList<Node> getNodos(){
+      return nodos;
    }
 }
 
@@ -103,6 +127,7 @@ class PowerNode extends BinaryNode{
    }
 
    public void print(){
+      System.out.println("<POWER>:");
       getLeftChild().print();
       System.out.println("**");
       getRightChild().print();
@@ -116,6 +141,7 @@ class PowerNode extends BinaryNode{
       v.visit(this);
    }
 }
+
 
 class FactorNode extends Node{
    int signo;
@@ -149,49 +175,43 @@ class FactorNode extends Node{
    ademas, estos pueden tener referencias a nodos de su
    mismo tipo
 */
-/*
-class Listable extends Node{
-   String nodename;
-   Listable(int op,Node node){
-      nodename = "";
+class CmpNode extends Node{
+   //term: factor (('*'|'/'|'%'|'//') factor)*
+   int op;
+   ArrayList<Node> nodes;
+   Node l;
+   Node p;
+   public CmpNode(Node l,int op,Node p){
+      this.l = l;
       this.op = op;
-      this.node = node;
-      this.nodos = new ArrayList<Node>();
+      this.p = p;
+      this.nodes = new ArrayList<Node>();
    }
 
-   Listable(int op,Node node,String nodename){
-      this.nodename = nodename;
-      this.op = op;
-      this.node = node;
-      this.nodos = new ArrayList<Node>();
+   public void addChildX(Node n){
+      nodes.add(n);
    }
 
-   public ArrayList<Node> getNodos(){
-      return nodos;
+   public Node getLeftChild(){
+      return l;
    }
 
-   public void addChild(Node n){
-      nodos.add(n);
+   public Node getRightChild(){
+      return p;
+   }
+
+   public void print(){
+      System.out.println("\nIzq[");
+      l.print();
+      System.out.println("]");
+      System.out.println(EnumOp.getSymbol(op));
+      System.out.println("Der[");
+      p.print();
+      System.out.println("]");
    }
 
    public String imprime(){
-      System.out.println("dknow man!");
-      return "Node\n "+"value: " + value +"\ntipo" + type;
-   }
-
-   //Debo fusionar el enum
-   public void print(){
-      System.out.println("<"+nodename+"> : "+EnumOp.getSymbol(op));
-      node.print();
-      System.out.println("Hijos:[");
-      printChildren();
-      System.out.println("]");
-      System.out.println("</"+nodename+">");
-   }
-
-   public void printChildren(){
-      for(int i=0;i<nodos.size();i++)
-         nodos.get(i).print();
+      return "Cmp:"+EnumOp.getSymbol(op);
    }
 
    public void accept(Visitor v){
@@ -199,53 +219,6 @@ class Listable extends Node{
    }
 }
 
-class AuxTermNode extends Listable{
-   //Listable(int op,Node node,String nodename){
-   public AuxTermNode(int op,Node n){
-      super(op,n,"auxterm");
-
-   }
-
-   public void accept(Visitor v){
-      v.visit(this);
-   }
-}
-
-class TermNode extends Node{
-   Node nodo;
-   //Node hijos;
-   ArrayList<Node> nodos;
-
-   public TermNode(Node n){
-      nodo = n;
-      //hijos = null;
-   }
-
-   public TermNode(Node n,Node h){
-      this.nodo = n;
-      this.nodos = new ArrayList<Node>();
-      this.nodos.add(h);
-      for(int i=0;i<h.getNodos().size();i++)
-         nodos.add(h.getNodos().get(i));
-   }
-
-   public void printChildren(){
-      for(int i=0;i<nodos.size();i++)
-         nodos.get(i).print();
-   }
-   public void print(){
-      System.out.println("<Term Node>");
-      System.out.println("#Hijos:"+nodos.size());
-      nodo.print();
-      printChildren();
-      System.out.println("</TermNode>");
-   }
-
-   public void accept(Visitor v){
-      v.visit(this);
-   }
-}
-*/
 /*
       ||||||||||||||||||   ||||        |||||||||||
       ||||           |||   ||||        |||      \\\
@@ -398,18 +371,18 @@ class EXPRN extends BinaryNode{
       super(l,r);
    }
    public void print(){
-      System.out.println("Nodo XPR :");
+      System.out.println("Nodo XPR_STMT :");
       System.out.println("\nIzq[");
       getLeftChild().print();
       System.out.println("]");
-      System.out.println("|");
+      System.out.println("=");
       System.out.println("Der[");
       getRightChild().print();
       System.out.println("]");
    }
 
    public String imprime(){
-      return " | ";
+      return this.getLeftChild().imprime()+" = "+this.getRightChild().imprime();
    }
 
    public void accept(Visitor v){
@@ -539,7 +512,8 @@ class SStmtNode extends Node{
 
    public String imprime(){
       //return "Node\n "+"value: " + value +"\ntipo" + type;
-      String temp= "SStmtNode: "+node.imprime();
+      //String temp= "SStmtNode: "+node.imprime();
+      String temp= "SStmtNode: ";
       for(int i=0;i<nodos.size();i++){
          temp+= nodos.get(i).imprime();
       }
@@ -635,7 +609,7 @@ class PrintNode extends Node{
 
    public String imprime(){
       //return "Node\n "+"value: " + value +"\ntipo" + type;
-      String temp= "PrintNode: "+node.imprime();
+      String temp= "PrintNode: ";
       for(int i=0;i<nodos.size();i++){
          temp+= nodos.get(i).imprime();
       }
@@ -687,20 +661,132 @@ class IfNode extends BinaryNode{
    }
 }
 
+//jajaja
+class IFNodeMejorado extends BinaryNode{
+   ArrayList<Node> hijos;
+   public IFNodeMejorado(Node test,Node suite){
+      super(test,suite);
+      this.hijos = new ArrayList<Node>();
+   }
+   
+   public void print(){
+      System.out.println("<IF>:");
+      System.out.println("\nCondicion[");
+      getLeftChild().print();
+      System.out.println("]");
+      System.out.println(" THENIF ");
+      System.out.println("[");
+      getRightChild().print();
+      if(hijos.size()>0){
+         System.out.println("<IFHijos>:{");
+         printChildren();
+         System.out.println("}</IFHijos>");
+      }
+      System.out.println("]\n</IF>");
+   }
+   
+   public void printChildren(){
+      for(int i=0;i<hijos.size();i++)
+         hijos.get(i).print();
+   }
+
+   public void addChild(Node n){
+      hijos.add(n);
+   }
+   
+   /* */
+   public void addChilds(ArrayList<Node> nodes){
+      for(int i=0; i< nodes.size(); i++){
+         hijos.add(nodes.get(i));
+      }
+   }
+   
+   public String imprime(){
+      return " If ";
+   }
+
+   public void accept(Visitor v){
+      v.visit(this);
+   }
+}
+
+class SingleElifNode extends BinaryNode{
+   public SingleElifNode(Node test,Node suite){
+      super(test,suite);
+   }
+   
+   public void print(){
+      System.out.println("<ELIF>:");
+      System.out.println("\nCond(");
+      getLeftChild().print();
+      System.out.println(")");
+      System.out.println(" ELIFTHEN ");
+      System.out.println("[");
+      getRightChild().print();
+      System.out.println("]\n</ELIF>");
+   }
+
+   public String imprime(){
+      return " ELIF ";
+   }
+
+   public void accept(Visitor v){
+      v.visit(this);
+   }
+}
+
+class ElifNode extends BinaryNode{
+   ArrayList<Node> hijos;
+   
+   public ElifNode(Node test,Node suite){
+      super(test,suite);
+      this.hijos = new ArrayList<Node>();
+      hijos.add(new SingleElifNode(test,suite));
+   }
+   /* Added */
+   public void addChild(Node n){
+      this.hijos.add(n);
+   }
+   
+   public void print(){
+      System.out.println("<ELIF>:");
+      System.out.println("\nCond(");
+      getLeftChild().print();
+      System.out.println(")");
+      System.out.println(" ELIFTHEN ");
+      System.out.println("[");
+      getRightChild().print();
+      System.out.println("]\n</ELIF>");
+   }
+   
+   public ArrayList<Node> getNodos(){
+      return this.hijos;
+   }
+
+   public String imprime(){
+      return " ELIF ";
+   }
+
+   public void accept(Visitor v){
+      v.visit(this);
+   }
+}
+
+
 class WhileNode extends BinaryNode{
    public WhileNode(Node test,Node suite){
       super(test,suite);
    }
 
    public void print(){
-      System.out.println("While:");
+      System.out.println("<While>:");
       System.out.println("\nIzq[");
       getLeftChild().print();
       System.out.println("]");
       System.out.println(" = ");
       System.out.println("Der[");
       getRightChild().print();
-      System.out.println("]");
+      System.out.println("]\n</While>");
    }
 
    public String imprime(){
@@ -712,6 +798,11 @@ class WhileNode extends BinaryNode{
    }
 }
 
+/*
+class ComparisonNode extends BinaryNode{
+
+}
+*/
 //List
 class CompNode extends Node{
    int op;
@@ -755,6 +846,35 @@ class CompNode extends Node{
    }
 }
 
+class NotNode extends Node{
+   Node node;
+   //('+'|'-') factor | power
+   public NotNode(Node n){
+      node = n;
+   }
+
+   public Node getChild(){
+      return node;
+   }
+
+   //Solo es para imprimir
+   public Node getLeftChild(){
+      return node;
+   }
+
+   public void print(){
+      System.out.println("Nodo NOT:\nNOT");
+      node.print();
+   }
+
+   public String imprime(){
+      return "NOT";
+   }
+
+   public void accept(Visitor v){
+      v.visit(this);
+   }
+}
 /* -----------------------------    ------------------------------------ */
 class AST{
    Node root;

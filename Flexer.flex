@@ -66,13 +66,13 @@ import java.util.Arrays;
     }
 %}
 NNDIGIT		      =  [1-9]
-/* Cambie esto tenia [0-1]*/
+/* Cambie esto tenia [0-1] */
 DIGIT           	=  [0-9]
 CERO             	=  0
 NEWLINE          	=  "\n"
 IDENTIFIER       	= 	([:letter:] | "_" )([:letter:] | "_" | [0-9])*
 CHAR_LITERAL   	= 	([:letter:] | [:digit:] | "_" | "$" | " " | "#"
-				         | {OPERADOR} | {SEPARADOR})
+				         | {OPERADOR} | {SEPARADOR} | ".")
 OPERADOR  		   =  ("+" | "-" | "*" | "**" | "/" | "//" | "%"
                      |"<" | ">" | "<=" | ">=" | "==" | "!=" | "=")
 SEPARADOR  		   =  ("(" | ")" | ":")
@@ -120,7 +120,9 @@ BOOLEAN		      =	("True" | "False")
                            yyparser.yylval = new FloatLeaf(Double.parseDouble(yytext()));
   	      				      return Parser.REAL;
                         }
-  {CERO} | {NNDIGIT}+   {
+    {CERO}
+  | {NNDIGIT} ({NNDIGIT} | {CERO})*
+                        {
                            yyparser.yylval = new IntLeaf(Integer.parseInt(yytext()) );
   	   				         return Parser.ENTERO;
                         }
@@ -156,10 +158,10 @@ BOOLEAN		      =	("True" | "False")
   "for"				      { return Parser.FOR;}
   "def"			         { return Parser.DEF;}
   "as"				      { return Parser.AS;}
+  "if"					   { return Parser.IF;}
   "elif"					   { return Parser.ELIF;}
   "or"					   { return Parser.OR;}
   "else"				      { return Parser.ELSE;}
-  "if"					   { return Parser.IF;}
   "print"				   { return Parser.PRINT;}
   "return"				   { return Parser.RETURN;}
   "in"					   { return Parser.IN;}
