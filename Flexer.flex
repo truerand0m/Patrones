@@ -1,7 +1,9 @@
-/********************************************************************************
-**  Proyecto 2: Analizador léxico para p--, subconjunto de Python.                               **
-**  @author Diana Montes                                                                       **
-*********************************************************************************/
+/***********************************************************
+**       ||||||||||||                                     **
+**       ||||     |||   |||||||||  |||||||||              **
+**       ||||||||||||   |||||||||  |||||||||              **
+**       ||||                                             **
+***********************************************************/
 import java.util.Stack;
 import java.util.Arrays;
 %%
@@ -66,7 +68,7 @@ import java.util.Arrays;
     }
 %}
 NNDIGIT		      =  [1-9]
-/* Cambie esto tenia [0-1] */
+/* Cambie esto, tenia [0-1] */
 DIGIT           	=  [0-9]
 CERO             	=  0
 NEWLINE          	=  "\n"
@@ -129,42 +131,42 @@ BOOLEAN		      =	("True" | "False")
   "+"         			   { return Parser.MAS;  }
   "-"				         { return Parser.MENOS;}
   "*"				         { return Parser.POR; }
-  "**"				      { return Parser.POTENCIA;}
-  "/"				         { return Parser.DIV;}
-  "//"				      { return Parser.DIVENTERA;}
-  "%"				         { return Parser.MODULO;}
-  "<"				         { return Parser.LE;}
-  ">"				         { return Parser.GR;}
-  "<="				      { return Parser.LEQ;}
-  ">="				      { return Parser.GRQ;}
-  "=="				      { return Parser.EQUALS;}
-  "!="				      { return Parser.DIFF;}
-  "="				         { return Parser.EQ;}
-  "("				         { return Parser.PA;}
-  ")"				         { return Parser.PC;}
-  ":"				         { return Parser.DOBLEPUNTO;}
-  ";"				         { return Parser.PUNTOCOMA;}
-  "^"				         { return Parser.XOR;}
-  "&"				         { return Parser.ANDB;}
-  "|"				         { return Parser.ORB;}
-{BOOLEAN}			      { return Parser.BOOLEAN;}
-  "and"                 { return Parser.AND;}
-  "from"			         { return Parser.FROM;}
+  "**"				      { return Parser.POTENCIA; }
+  "/"				         { return Parser.DIV; }
+  "//"				      { return Parser.DIVENTERA; }
+  "%"				         { return Parser.MODULO; }
+  "<"				         { return Parser.LE; }
+  ">"				         { return Parser.GR; }
+  "<="				      { return Parser.LEQ; }
+  ">="				      { return Parser.GRQ; }
+  "=="				      { return Parser.EQUALS; }
+  "!="				      { return Parser.DIFF; }
+  "="				         { return Parser.EQ; }
+  "("				         { return Parser.PA; }
+  ")"				         { return Parser.PC; }
+  ":"				         { return Parser.DOBLEPUNTO; }
+  ";"				         { return Parser.PUNTOCOMA; }
+  "^"				         { return Parser.XOR; }
+  "&"				         { return Parser.ANDB; }
+  "|"				         { return Parser.ORB; }
+{BOOLEAN}			      { return Parser.BOOLEAN; }
+  "and"                 { return Parser.AND; }
+  "from"			         { return Parser.FROM; }
   "not in"              { return Parser.NOTIN; }
   "is not"              { return Parser.ISNOT; }
   "is"                  { return Parser.IS; }
-  "not"				      { return Parser.NOT;}
-  "while"			      { return Parser.WHILE;}
-  "for"				      { return Parser.FOR;}
+  "not"				      { return Parser.NOT; }
+  "while"			      { return Parser.WHILE; }
+  "for"				      { return Parser.FOR; }
   "def"			         { return Parser.DEF;}
-  "as"				      { return Parser.AS;}
-  "if"					   { return Parser.IF;}
-  "elif"					   { return Parser.ELIF;}
-  "or"					   { return Parser.OR;}
-  "else"				      { return Parser.ELSE;}
-  "print"				   { return Parser.PRINT;}
-  "return"				   { return Parser.RETURN;}
-  "in"					   { return Parser.IN;}
+  "as"				      { return Parser.AS; }
+  "if"					   { return Parser.IF; }
+  "elif"					   { return Parser.ELIF; }
+  "or"					   { return Parser.OR; }
+  "else"				      { return Parser.ELSE; }
+  "print"				   { return Parser.PRINT; }
+  "return"				   { return Parser.RETURN; }
+  "in"					   { return Parser.IN; }
   {IDENTIFIER}          {
                            cadena = yytext();
                            yyparser.yylval = new IdentifierLeaf(cadena);

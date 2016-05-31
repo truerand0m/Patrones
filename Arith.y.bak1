@@ -52,18 +52,24 @@ input:
             System.out.println("Llegue a input");
             System.out.println("*****************************");
             System.out.println("------------Accept-----------");
+            //exp
+            /*
+            for(int i=0;i<$1.getNodos().size();i++){
+               System.out.println("||||||||||||||||||||||||||||||||||||||||");
+               $1.getNodos().get(i).accept(v);
+               System.out.println("||||||||||||||||||||||||||||||||||||||||");
+            }
+            */
             $1.accept(v);
             Printer p = new Printer($1);
             p.print();
-            System.out.println("------------<SemanticAnalysis>-----------");
-            Visitor sm = new SemanticVisitor();
-            $1.accept(sm);
-            System.out.println("------------</SemanticAnalysis>-----------");
-            //imprimo las variables en la tabla de simbolos
-            System.out.println("************USED VARS*******************");
-            System.out.println("{");
-            symtable.showAll();
-            System.out.println("}");
+            /*
+            System.out.println("------------Print-----------");
+            //$1.print();
+            Printer p = new Printer($1);
+            p.print();
+            System.out.println("*****************************");
+            */
       }
       ;
 /* stmt + */
@@ -235,7 +241,8 @@ atom:   CADENA            {$$ = $1;}
       | ENTERO            {$$ = $1;}
       | REAL              {$$ = $1;}
       | IDENTIFIER        {
-                              $$ = $1;
+                           $$ = $1;
+                           symtable.
                           }
 ;
 
@@ -243,8 +250,8 @@ atom:   CADENA            {$$ = $1;}
 
 /* a reference to the lexer object */
 private Flexer lexer;
-/* Added 26 */
-public static SymbolTable symtable;
+private SymbolTable symtable;
+
 /* interface to the lexer */
 private int yylex () {
     int yyl_return = -1;
@@ -266,12 +273,10 @@ public void yyerror (String error) {
 public Parser(Reader r) {
     lexer = new Flexer(r, this);
     yydebug = true;
-    symtable = new SymbolTable();
 }
 
 /* that's how you use the parser */
 public static void main(String args[]) throws IOException {
     Parser yyparser = new Parser(new FileReader(args[0]));
     yyparser.yyparse();
-    /* Imprimo la tabla de simbolos */
 }

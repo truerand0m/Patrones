@@ -1,16 +1,12 @@
 /** Componente. The generic Node class. */
 import java.util.ArrayList;
 /*
-   2DO:
-      Check If visitor;
-      Check Print Visitor;
-      Check SStmtNode hijos;
 */
 public class Node extends Object{
    Children childrenNodes;
    ParserVal value;
    int type;
-
+   
    /* Added */
    Node node;
    int op;
@@ -142,7 +138,6 @@ class PowerNode extends BinaryNode{
    }
 }
 
-
 class FactorNode extends Node{
    int signo;
    Node f;
@@ -221,7 +216,7 @@ class CmpNode extends Node{
 
 /*
       ||||||||||||||||||   ||||        |||||||||||
-      ||||           |||   ||||        |||      \\\
+      |||            |||   ||||        |||      \\\
       |||            |||   ||||        |||      |||
       ||||||||||||||||||   |||||||||   ||||||||///
 */
@@ -365,7 +360,7 @@ class XorNode extends BinaryNode{
    }
 }
 
-
+/* THis is the node for Assignation */
 class EXPRN extends BinaryNode{
    public EXPRN(Node l, Node r){
       super(l,r);
@@ -374,6 +369,12 @@ class EXPRN extends BinaryNode{
       System.out.println("Nodo XPR_STMT :");
       System.out.println("\nIzq[");
       getLeftChild().print();
+      //SEMANTICTEST: Sabemos que el lado izq es un id, tomamos el 
+      //id y lo agregamos a la tabla
+      IdentifierLeaf idlf = (IdentifierLeaf)getLeftChild();
+      System.out.println("MUAJAJA id "+idlf.name);
+      Parser.symtable.put(new Symbol(idlf.name,"undefined"));
+      //FIN SEMANTICTEST
       System.out.println("]");
       System.out.println("=");
       System.out.println("Der[");
@@ -661,7 +662,7 @@ class IfNode extends BinaryNode{
    }
 }
 
-//jajaja
+//rename this
 class IFNodeMejorado extends BinaryNode{
    ArrayList<Node> hijos;
    public IFNodeMejorado(Node test,Node suite){
@@ -735,15 +736,15 @@ class SingleElifNode extends BinaryNode{
    }
 }
 
+/* Wrapper para nodos elif */
 class ElifNode extends BinaryNode{
    ArrayList<Node> hijos;
-   
    public ElifNode(Node test,Node suite){
       super(test,suite);
       this.hijos = new ArrayList<Node>();
       hijos.add(new SingleElifNode(test,suite));
    }
-   /* Added */
+   
    public void addChild(Node n){
       this.hijos.add(n);
    }
@@ -798,12 +799,6 @@ class WhileNode extends BinaryNode{
    }
 }
 
-/*
-class ComparisonNode extends BinaryNode{
-
-}
-*/
-//List
 class CompNode extends Node{
    int op;
    Node node;

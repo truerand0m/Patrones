@@ -76,6 +76,8 @@ class IdentifierLeaf extends Leaf{
    String name;
 
    public IdentifierLeaf(String id){
+      /* TEst */
+      //Parser.symtable.put(new Symbol(id,"undf"));
       name = id;
    }
 

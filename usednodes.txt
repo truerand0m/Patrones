@@ -1,0 +1,22 @@
+new PrintVisitor();
+new Printer($1);
+new SemanticVisitor();
+new Lista($1);}
+new IFNodeMejorado($2,$4); }
+new ElifNode($2,$4); }
+new SingleElifNode($3,$5)
+new WhileNode($2,$4); }
+new SStmtNode($1); }
+new EXPRN($1,$3);}
+new PrintNode(); }
+new OrNode($1,$3); }
+new AndNode($1,$3);
+new NotNode($2); }
+new CmpNode($1,EnumOp.LE,$3); }
+new ExprNode($1,$3);}
+new XorNode($1,$3); }
+new AndNode($1,$3); }
+new ArithNode($1,EnumOp.MAS,$3);}
+new TermNodeX($1,EnumOp.POR,$3); }
+FactorNode(EnumOp.MAS,$2); }
+new PowerNode($1,$3); }
