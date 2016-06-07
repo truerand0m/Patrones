@@ -12,13 +12,10 @@ public interface Visitor{
    public void visit(ExprNode n);
    public void visit(EXPRN n);
    public void visit(SStmtNode n);
-   public void visit(StmtNode n);
    public void visit(WhileNode n);
-   public void visit(IfNode n);
    public void visit(IFNodeMejorado n);
    public void visit(ElifNode n);
    public void visit(XorNode n);
-   /* New Nodes */
    public void visit(AuxTermNode n);
    public void visit(TermNode n);
    public void visit(PrintNode n);
@@ -103,47 +100,28 @@ class PrintVisitor implements Visitor{
       l.accept(this);
       r.accept(this);
    }
-
+   
+   
    public void visit(SStmtNode n){
       System.out.println("Soy nodo SStmtNode:");
-      //System.out.println(n.node.imprime());
       System.out.println("Nodos hijos: "+n.nodos.size());
       String temp = "";
       System.out.println("[");
       for(int i = 0; i< n.nodos.size(); i++){
          Node nn = n.nodos.get(i);
-         //System.out.println(nn.imprime());
          nn.print();
-         //temp+= "\n"+n.nodos.get(i).imprime();
       }
       System.out.println("]");
    }
-
+   
    public void visit(PrintNode n){
-      System.out.println("Soy nodo SStmtNode:");
-      //System.out.println(n.node.imprime());
+      System.out.println("Soy nodo PrintNode:");
       System.out.println("Nodos hijos: "+n.nodos.size());
       String temp = "";
       System.out.println("[");
       for(int i = 0; i< n.nodos.size(); i++){
          Node nn = n.nodos.get(i);
-         //System.out.println(nn.imprime());
          nn.print();
-         //temp+= "\n"+n.nodos.get(i).imprime();
-      }
-      System.out.println("]");
-   }
-
-   public void visit(StmtNode n){
-      System.out.println("StmtNode:");
-      //System.out.println(n.node.imprime());
-      String temp = "";
-      System.out.println("[");
-      for(int i = 0; i< n.nodos.size(); i++){
-         Node nn = n.nodos.get(i);
-         //System.out.println(nn.imprime());
-         nn.print();
-         //temp+= "\n"+n.nodos.get(i).imprime();
       }
       System.out.println("]");
    }
@@ -155,12 +133,7 @@ class PrintVisitor implements Visitor{
       n.getRightChild().print();
       System.out.println("}");
    }
-
-   public void visit(IfNode n){
-      System.out.println("Soy nodo IFNode:");
-      n.print();
-   }
-
+   
    public void visit(EXPRN n){
       System.out.println("Soy nodo Expr__:");
       Node l = n.getLeftChild();
@@ -171,10 +144,12 @@ class PrintVisitor implements Visitor{
 
    /* New Nodes */
    public void visit(AuxTermNode n){
+      System.out.println("SOY AUXTERMNODE NO DEBERIAS VER ESTO!");
       n.print();
    }
 
    public void visit(TermNode n){
+      System.out.println("SOY TERMNODE NO DEBERIAS VER ESTO!");
       n.print();
    }
 
@@ -186,8 +161,14 @@ class PrintVisitor implements Visitor{
       n.print();
    }
 
+   /* 
+      IfNode Mejorado es un if con una lista (posiblemente vacia ) de elif 
+      Por lo que , tengo que visitar el if y luego visitar los elif
+   */
    public void visit(IFNodeMejorado n){
       System.out.print("IfMejorado");
+      //public Node getLeftChild(){
+      //public Node getRightChild(){
       n.print();
    }
    

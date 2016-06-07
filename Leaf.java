@@ -1,4 +1,5 @@
-/* Types:
+/* 
+*Types:
 * 1 - Integer
 * 2 - Float
 * 3 - Boolean

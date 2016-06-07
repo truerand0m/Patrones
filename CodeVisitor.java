@@ -1,34 +1,37 @@
 import java.util.*;
-public class SemanticVisitor implements Visitor{
+public class CodeVisitor implements Visitor{
    public void visit(Node n){
-      System.out.println("Soy clase generica Nodo");
+      System.out.println("Soy clase generica Nodo ERROR");
+      System.exit(0);
    }
 
    public void visit(StringLeaf s){
-      System.out.println("Soy nodo hoja con valor: "+ s.getValue().sval);
+      //System.out.println("Soy nodo hoja con valor: "+ s.getValue().sval);
+      System.out.print("ldc \""+s.getValue().sval+"\"");
    }
 
    public void visit(IntLeaf n){
-      System.out.println("Soy nodo entero con valor: "+ n.getValue().ival);
+      System.out.print("entero"+ n.getValue().ival);
    }
 
    public void visit(IdentifierLeaf n){
+      /*
       n.print();
       if(Parser.symtable.lookUp(n.name)==null){
          System.out.println("We cant continue var "+n.name+" not defined");
          System.exit(1);
       }
-      /* dont know */
-      else{
-      }
+      */
    }
 
    public void visit(PowerNode n){
+      /*
       System.out.println("Soy nodo potencia ");
       Node l = n.getLeftChild();
       Node r = n.getRightChild();
       l.accept(this);
       r.accept(this);
+      */
    }
 
    public void visit(FactorNode n){
@@ -38,81 +41,101 @@ public class SemanticVisitor implements Visitor{
    }
 
    public void visit(TermNodeX n){
+      /*
       Node i = n.getLeftChild();
       Node d = n.getRightChild();
       i.accept(this);
       d.accept(this);
+      */
    }
 
    public void visit(ArithNode n){
+      /*
       Node l = n.getLeftChild();
       Node r = n.getRightChild();
       //System.out.println(n.op);
       l.accept(this);
       r.accept(this);
+      */
    }
 
    public void visit(AndNode n){
+      /*
+      //System.out.println("Soy nodo and:");
       Node l = n.getLeftChild();
       Node r = n.getRightChild();
       l.accept(this);
       r.accept(this);
+      */
    }
 
    public void visit(XorNode n){
+      /*
+      //System.out.println("Soy nodo xor:");
       Node l = n.getLeftChild();
       Node r = n.getRightChild();
       l.accept(this);
       r.accept(this);
+      */
    }
 
    public void visit(OrNode n){
+      /*
+      //System.out.println("Soy nodo or:");
       Node l = n.getLeftChild();
       Node r = n.getRightChild();
       l.accept(this);
       r.accept(this);
+      */
    }
 
    /* THis is the assignation node */
    public void visit(EXPRN n){
+      /*
       System.out.println("Soy nodo Expr__:");
       Node l = n.getLeftChild();
       Node r = n.getRightChild();
       l.accept(this);
       r.accept(this);
+      */
    }
    
    /* What the fuck is this ? */
    public void visit(ExprNode n){
+      /*
       Node l = n.getLeftChild();
       Node r = n.getRightChild();
       l.accept(this);
       r.accept(this);
+      */
    }
 
    /* Lista de stmts */
    public void visit(SStmtNode n){
-      System.out.println("Soy nodo SStmtNode:");
-      System.out.println("Nodos hijos: "+n.nodos.size());
+      //System.out.println("Soy nodo SStmtNode:");
+      //System.out.println("Nodos hijos: "+n.nodos.size());
       String temp = "";
-      System.out.println("[");
+      //System.out.println("[");
       for(int i = 0; i< n.nodos.size(); i++){
          Node nn = n.nodos.get(i);
          nn.accept(this);
       }
-      System.out.println("]");
+      //System.out.println("]");
    }
 
    public void visit(PrintNode n){
-      System.out.println("Soy nodo PrintNode:");
-      System.out.println("Nodos hijos: "+n.nodos.size());
-      System.out.println("[");
       ArrayList<Node> nodos = n.getChilds();
       for(int i=0; i<nodos.size();i++){
          Node nn = nodos.get(i);
          nn.accept(this);
+         /*
+         
+         */
+         System.out.println("astore_2");
+         System.out.println("getstatic java/lang/System/out Ljava/io/PrintStream;");
+         System.out.println("aload_2");
+         System.out.println("invokevirtual java/io/PrintStream/println (Ljava/lang/String;)V");
       }
-      System.out.println("]");
    }
    
    /* TOCHECK: How 2 analyze this*/
@@ -168,6 +191,7 @@ public class SemanticVisitor implements Visitor{
             h.accept(this);
          }
       }
+      
    }
    
    /* TOCHECK: How 2 analyze this*/

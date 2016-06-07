@@ -64,6 +64,17 @@ input:
             System.out.println("{");
             symtable.showAll();
             System.out.println("}");
+            
+            System.out.println("------------<CodGen>-----------");
+            String header =   ".class public super Prueba\n"+
+                              ".super java/lang/Object\n"+
+                              ".method public static main ([Ljava/lang/String;)V\n";
+            System.out.println(header);
+            Visitor codgen = new CodeVisitor();
+            $1.accept(codgen);
+            String footer = "return\n"+".end method";
+            System.out.println(footer);
+            System.out.println("------------</CodGen>-----------");
       }
       ;
 /* stmt + */
@@ -97,10 +108,12 @@ if_stmt: IF test DOBLEPUNTO suite { $$ = new IFNodeMejorado($2,$4); }
       |  IF test DOBLEPUNTO suite auxif {
                                           $$ = new IFNodeMejorado($2,$4);
                                           ArrayList<Node> nodos = $5.getNodos();
+                                          System.out.println("Debug "+nodos.size());
                                           if(nodos.size()>0)
                                              $$.addChilds(nodos);
                                        } 
       ;
+      
 /* 
    ELIF tiene que tener una lista para ir agregando ahi los nodos ,
    una vez que auxif es reducida totalmente, tomo la lista de 

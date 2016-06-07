@@ -1,0 +1,5 @@
+EL nodo print no muestra como su hijo a las variables
+Ver porque sucede esto.
+Por oto lado, es posible eliminar nodos que no se utilizaron.
+El nodo IfNode Mejorado, siempre regresa null en su lista de hijos,
+aun cunado tenga elifs asociados.
