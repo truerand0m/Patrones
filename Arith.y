@@ -4,8 +4,37 @@
   import java.util.*;
 %}
 /* ----------------------------------------------------------------------
-   For the latest version  visit: https://github.com/truerand0m
-   Also, if you are using linux replace java -jar "dir\jflex" by jflex 
+   Oolong tiene un error:
+   Cambiar linea 834 por :else if(lexer.isFloat(word))
+                  return new Ldc((float) lexer.parseFloat(word)); 
+   en Oolong.java
+   Agregar el metodo:
+   public float parseFloat(String s) {
+      return Float.parseFloat(s);
+   } a Lexer.java
+   
+   modificar isFloat a:
+   static boolean isFloat(String s)
+    {
+        String val = s;
+        try {
+            if(val.endsWith("D") || val.endsWith("d"))
+                return false;
+            double d = Double.valueOf(val).doubleValue();
+            d =  Double.parseDouble(s);
+            //if(d == (float) d)
+                return true;
+        }
+        catch(Exception e) {}
+        return false;
+    }
+    
+   Compilar:
+   ..\COM\sootNsmoke>javac instructions/*.java jvm/*.java oolong/*.java prolog/*.java scheme/*.java
+   y Compilar Gnoloo y Oolong y ya.
+   //
+   make run  >  log.txt &&  sed '/^CodGenInicio$/,/^CodGenFinal$/{//!b};d' log.txt | tee program.j && cp program.j ../../TestCodeen
+   //
    ----------------------------------------------------------------------
 */
 /*
@@ -60,13 +89,13 @@ input:
             $1.accept(sm);
             System.out.println("------------</SemanticAnalysis>-----------");
             //imprimo las variables en la tabla de simbolos
-            System.out.println("************USED VARS*******************");
+            System.out.println("************USED VARS & TYPE*******************");
+            System.out.println("VAR|TYPE");
             System.out.println("{");
             symtable.showAll();
             System.out.println("}");
-            
-            System.out.println("------------<CodGen>-----------");
-            String header =   ".class public super Prueba\n"+
+            System.out.println("CodGenInicio");
+            String header =   ".class public super Program\n"+
                               ".super java/lang/Object\n"+
                               ".method public static main ([Ljava/lang/String;)V\n";
             System.out.println(header);
@@ -74,7 +103,7 @@ input:
             $1.accept(codgen);
             String footer = "return\n"+".end method";
             System.out.println(footer);
-            System.out.println("------------</CodGen>-----------");
+            System.out.println("CodGenFinal");
       }
       ;
 /* stmt + */

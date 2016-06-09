@@ -1,0 +1,17 @@
+TODO:
+   Debo definir ell modo de tratar las operciones para
+   tipos booleanos y para las cadenas.
+   
+   Ademas, debo ver porque no esta funcionando la conversion
+   de tipos.
+   
+   Asumir que se usan construcciones basicas y hacer codigo
+   padra estas, despues verificar si se cumple para
+   construcciones recursivas.
+   
+   Como modificar l arbol para la simplificacion de datos
+   Es decir, como haceer que la concatenacion de dos
+   cadenas se vuelva una cadena y se quiten esos hijos.
+   
+   Que pasa con el nodo print?; el orden de visita
+   se cumple?

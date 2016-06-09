@@ -11,6 +11,10 @@ public class SemanticVisitor implements Visitor{
    public void visit(IntLeaf n){
       System.out.println("Soy nodo entero con valor: "+ n.getValue().ival);
    }
+   
+   public void visit(FloatLeaf n){
+      System.out.println("Soy nodo entero con valor: "+ n.getValue().dval);
+   }
 
    public void visit(IdentifierLeaf n){
       n.print();

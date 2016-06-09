@@ -1,5 +1,6 @@
 /* 
 *Types:
+* 0 null
 * 1 - Integer
 * 2 - Float
 * 3 - Boolean

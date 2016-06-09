@@ -1,5 +1,7 @@
-x = 1+2+3.4;
-y = r;
+print "no soy 100tifiko","tampoco",3.1416,"loto","ni",1000000,"llonario";
+#11 % 3;
+#1*2*3.5*4;
+#x = 1+2+3.4;
 #1 + 1.2
 #3 ** 2+2;
 #print "oye tranquilo viejo";
