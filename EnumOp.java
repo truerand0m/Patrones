@@ -1,8 +1,3 @@
-/*
-%token MAS MENOS POR POTENCIA DIV  /* + | - | * | ** | /
-%token DIVENTERA MODULO LE GR LEQ /* // | % | < | > | <=
-%token GRQ EQUALS DIFF EQ PA /* >= | == | != | = | (
-*/
 public class EnumOp{
    public static final int MAS = 1;
    public static final int MENOS = 2;
@@ -64,15 +59,9 @@ public class EnumOp{
       }
    }
    
-   //Metodo para generar la instruccion, dependiendo
-   //del tipo y la instruccion
    public static String getOpcode(int type,int op){
-      /*
-      *Types:
-      * 0 null1 ,Integer, Float Boolean4 - String
-      */
       String opcode = "";
-      /* La numeracion de ops empiezan en 1: esto es un error notime*/
+      /* La numeracion de ops empiezan en 1*/
       String[] ops = {"","add","sub","mul","dknowpow","div","divi","rem"};
       if(op<=ops.length)
          opcode = ops[op];
@@ -86,26 +75,33 @@ public class EnumOp{
          case 2:
             opcode = "f"+opcode;
             break;
-         //Me hace falta definir como tratar las operaciones
-         //con booleanos y cadenas
-         /*
-         case 3:
-            opcode = "i"+opcode;
-            break;
-         case 3:
-            opcode = "i"+opcode;
-            break;
-         */
+         //definir bool cadenas
          default:
             opcode = "";
       }
       return opcode;
    }
    
+   public static String getInstruction(int type,String ins){
+      String instruccion = "";
+      switch(type){
+         case 0:
+            instruccion = "type error";
+            break;
+         case 1:
+            instruccion = "i"+ins;
+            break;
+         case 2:
+            instruccion = "f"+ins;
+            break;
+         //definir booleanos y cadenas
+         default:
+            instruccion = "";
+      }
+      return instruccion;
+   }
+   
    public static void main(String[] args){
-      //'+'|'-'
-      //'*'|'/'|'%'|'//')
-      //resta de enteros
       int type = Integer.parseInt(args[0]);
       int op = Integer.parseInt(args[1]);
       System.out.println(getOpcode(type,op));

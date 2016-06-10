@@ -1,7 +1,4 @@
 public class TypeTable{
-   /*
-      Renglon 1:= 1,2 = 2  ie Int y Float = Float
-   */
    public static int[][] table = {
       {  -1,-1,-1,-1,-1 },
       {  -1,1,2,-1,-1   },
@@ -12,5 +9,11 @@ public class TypeTable{
    
    public static void main(String[] args){
       System.out.println(table[Integer.parseInt(args[0])][Integer.parseInt(args[1])]); 
+   }
+   
+   public static String genConvCode(int ptype,int ctype){
+      if(ptype == 2 && ctype == 1)
+         return "i2f";
+      return "";
    }
 }

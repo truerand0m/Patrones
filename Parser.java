@@ -431,7 +431,7 @@ final static String yyrule[] = {
 "atom : IDENTIFIER",
 };
 
-//#line 272 "Arith.y"
+//#line 204 "Arith.y"
 
 /* a reference to the lexer object */
 private Flexer lexer;
@@ -457,7 +457,7 @@ public void yyerror (String error) {
 /* lexer is created in the constructor */
 public Parser(Reader r) {
     lexer = new Flexer(r, this);
-    yydebug = true;
+    //yydebug = true;
     symtable = new SymbolTable();
 }
 
@@ -622,86 +622,76 @@ boolean doaction;
       {
 //########## USER-SUPPLIED ACTIONS ##########
 case 2:
-//#line 66 "Arith.y"
+//#line 31 "Arith.y"
 {
             Visitor v = new PrintVisitor();
-            System.out.println("Llegue a input");
             System.out.println("*****************************");
             System.out.println("------------Accept-----------");
             val_peek(0).accept(v);
             Printer p = new Printer(val_peek(0));
-            p.print();
-            System.out.println("------------<SemanticAnalysis>-----------");
             Visitor sm = new SemanticVisitor();
             val_peek(0).accept(sm);
-            System.out.println("------------</SemanticAnalysis>-----------");
-            /*imprimo las variables en la tabla de simbolos*/
-            System.out.println("************USED VARS & TYPE*******************");
-            System.out.println("VAR|TYPE");
-            System.out.println("{");
-            symtable.showAll();
-            System.out.println("}");
-            System.out.println("CodGenInicio");
+            System.out.println("------------OUTPUT-----------");
             String header =   ".class public super Program\n"+
                               ".super java/lang/Object\n"+
                               ".method public static main ([Ljava/lang/String;)V\n";
-            System.out.println(header);
             Visitor codgen = new CodeVisitor();
             val_peek(0).accept(codgen);
             String footer = "return\n"+".end method";
-            System.out.println(footer);
-            System.out.println("CodGenFinal");
+            MFiles.write(header+"\n"+CodeVisitor.code+"\n"+footer);
+            /*ClassGen*/
+            COM.sootNsmoke.oolong.Oolong.main(new String[]{"program.j"});
       }
 break;
 case 4:
-//#line 98 "Arith.y"
+//#line 54 "Arith.y"
 {yyval = new Lista(val_peek(0));}
 break;
 case 5:
-//#line 99 "Arith.y"
+//#line 55 "Arith.y"
 { val_peek(1).addChild(val_peek(0)); }
 break;
 case 6:
-//#line 103 "Arith.y"
+//#line 59 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 7:
-//#line 104 "Arith.y"
+//#line 60 "Arith.y"
 { yyval=val_peek(1); }
 break;
 case 8:
-//#line 108 "Arith.y"
+//#line 64 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 9:
-//#line 109 "Arith.y"
+//#line 65 "Arith.y"
 {
                               val_peek(1).addChild(val_peek(0));
                               yyval = val_peek(1);
                            }
 break;
 case 10:
-//#line 115 "Arith.y"
+//#line 71 "Arith.y"
 { yyval=val_peek(0);}
 break;
 case 11:
-//#line 116 "Arith.y"
+//#line 72 "Arith.y"
 { yyval=val_peek(0); }
 break;
 case 12:
-//#line 119 "Arith.y"
+//#line 75 "Arith.y"
 { yyval=val_peek(0); }
 break;
 case 13:
-//#line 120 "Arith.y"
+//#line 76 "Arith.y"
 { yyval=val_peek(0); }
 break;
 case 14:
-//#line 123 "Arith.y"
+//#line 79 "Arith.y"
 { yyval = new IFNodeMejorado(val_peek(2),val_peek(0)); }
 break;
 case 15:
-//#line 124 "Arith.y"
+//#line 80 "Arith.y"
 {
                                           yyval = new IFNodeMejorado(val_peek(3),val_peek(1));
                                           ArrayList<Node> nodos = val_peek(0).getNodos();
@@ -711,253 +701,244 @@ case 15:
                                        }
 break;
 case 16:
-//#line 138 "Arith.y"
+//#line 89 "Arith.y"
 { yyval = new ElifNode(val_peek(2),val_peek(0)); }
 break;
 case 17:
-//#line 139 "Arith.y"
+//#line 90 "Arith.y"
 { val_peek(4).addChild(new SingleElifNode(val_peek(2),val_peek(0))); }
 break;
 case 18:
-//#line 142 "Arith.y"
+//#line 93 "Arith.y"
 {yyval = new WhileNode(val_peek(2),val_peek(0)); }
 break;
 case 19:
-//#line 146 "Arith.y"
+//#line 97 "Arith.y"
 {  yyval = val_peek(2); }
 break;
 case 20:
-//#line 147 "Arith.y"
+//#line 98 "Arith.y"
 {  yyval = val_peek(1); }
 break;
 case 21:
-//#line 150 "Arith.y"
+//#line 100 "Arith.y"
 {  yyval = new SStmtNode(val_peek(0)); }
 break;
 case 22:
-//#line 151 "Arith.y"
+//#line 101 "Arith.y"
 {
                                                    val_peek(2).addChild(val_peek(0));
                                                    yyval = val_peek(2);
                                                 }
 break;
 case 23:
-//#line 155 "Arith.y"
+//#line 105 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 24:
-//#line 156 "Arith.y"
+//#line 106 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 25:
-//#line 159 "Arith.y"
+//#line 109 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 26:
-//#line 160 "Arith.y"
+//#line 110 "Arith.y"
 { yyval = new EXPRN(val_peek(2),val_peek(0));}
 break;
 case 27:
-//#line 164 "Arith.y"
+//#line 113 "Arith.y"
 { yyval = new PrintNode(); }
 break;
 case 28:
-//#line 165 "Arith.y"
+//#line 114 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 29:
-//#line 166 "Arith.y"
+//#line 115 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 30:
-//#line 170 "Arith.y"
+//#line 118 "Arith.y"
 { yyval=new PrintNode(val_peek(0)); }
 break;
 case 31:
-//#line 171 "Arith.y"
+//#line 119 "Arith.y"
 {
                                  val_peek(2).addChild(val_peek(0));
                                  yyval = val_peek(2);
                               }
 break;
 case 32:
-//#line 178 "Arith.y"
+//#line 126 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 33:
-//#line 182 "Arith.y"
+//#line 130 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 34:
-//#line 183 "Arith.y"
+//#line 131 "Arith.y"
 { yyval = new OrNode(val_peek(2),val_peek(0)); }
 break;
 case 35:
-//#line 188 "Arith.y"
+//#line 134 "Arith.y"
 { yyval=val_peek(0); }
 break;
 case 36:
-//#line 189 "Arith.y"
+//#line 135 "Arith.y"
 {
-                                    /* Posible error */
-                                    /*
-                                    $1.addChild($3);
-                                    $$ = $1;
-                                    */
-                                    /* 
-                                       Duda: como se hasta que parte bajar
-                                       del Arbol
-                                    */
                                     yyval = new AndNode(val_peek(2),val_peek(0));
                                  }
 break;
 case 37:
-//#line 204 "Arith.y"
+//#line 140 "Arith.y"
 { yyval= new NotNode(val_peek(0)); }
 break;
 case 38:
-//#line 205 "Arith.y"
+//#line 141 "Arith.y"
 { yyval= val_peek(0); }
 break;
 case 39:
-//#line 209 "Arith.y"
+//#line 143 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 40:
-//#line 210 "Arith.y"
+//#line 144 "Arith.y"
 { yyval = new CmpNode(val_peek(2),EnumOp.LE,val_peek(0)); }
 break;
 case 41:
-//#line 211 "Arith.y"
+//#line 145 "Arith.y"
 { yyval = new CmpNode(val_peek(2),EnumOp.GR,val_peek(0)); }
 break;
 case 42:
-//#line 212 "Arith.y"
+//#line 146 "Arith.y"
 { yyval = new CmpNode(val_peek(2),EnumOp.EQUALS,val_peek(0)); }
 break;
 case 43:
-//#line 213 "Arith.y"
+//#line 147 "Arith.y"
 { yyval = new CmpNode(val_peek(2),EnumOp.GRQ,val_peek(0)); }
 break;
 case 44:
-//#line 214 "Arith.y"
+//#line 148 "Arith.y"
 { yyval = new CmpNode(val_peek(2),EnumOp.LEQ,val_peek(0)); }
 break;
 case 45:
-//#line 215 "Arith.y"
+//#line 149 "Arith.y"
 { yyval = new CmpNode(val_peek(2),EnumOp.DIFF,val_peek(0)); }
 break;
 case 46:
-//#line 216 "Arith.y"
+//#line 150 "Arith.y"
 { yyval = new CmpNode(val_peek(2),EnumOp.IN,val_peek(0)); }
 break;
 case 47:
-//#line 217 "Arith.y"
+//#line 151 "Arith.y"
 { yyval = new CmpNode(val_peek(2),EnumOp.NOTIN,val_peek(0)); }
 break;
 case 48:
-//#line 218 "Arith.y"
+//#line 152 "Arith.y"
 { yyval = new CmpNode(val_peek(2),EnumOp.IS,val_peek(0)); }
 break;
 case 49:
-//#line 219 "Arith.y"
+//#line 153 "Arith.y"
 { yyval = new CmpNode(val_peek(2),EnumOp.ISNOT,val_peek(0)); }
 break;
 case 50:
-//#line 223 "Arith.y"
-{ yyval= val_peek(0);}
+//#line 156 "Arith.y"
+{ yyval= val_peek(0); }
 break;
 case 51:
-//#line 224 "Arith.y"
-{ yyval = new ExprNode(val_peek(2),val_peek(0));}
+//#line 157 "Arith.y"
+{ yyval = new ExprNode(val_peek(2),val_peek(0)); }
 break;
 case 52:
-//#line 227 "Arith.y"
+//#line 160 "Arith.y"
 { yyval=val_peek(0); }
 break;
 case 53:
-//#line 228 "Arith.y"
+//#line 161 "Arith.y"
 { yyval = new XorNode(val_peek(2),val_peek(0)); }
 break;
 case 54:
-//#line 233 "Arith.y"
+//#line 165 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 55:
-//#line 234 "Arith.y"
+//#line 166 "Arith.y"
 { yyval = new AndNode(val_peek(2),val_peek(0)); }
 break;
 case 56:
-//#line 238 "Arith.y"
+//#line 170 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 57:
-//#line 239 "Arith.y"
+//#line 171 "Arith.y"
 { yyval = new ArithNode(val_peek(2),EnumOp.MAS,val_peek(0));}
 break;
 case 58:
-//#line 240 "Arith.y"
+//#line 172 "Arith.y"
 { yyval = new ArithNode(val_peek(2),EnumOp.MENOS,val_peek(0)); }
 break;
 case 59:
-//#line 244 "Arith.y"
+//#line 176 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 60:
-//#line 245 "Arith.y"
+//#line 177 "Arith.y"
 { yyval = new TermNodeX(val_peek(2),EnumOp.POR,val_peek(0)); }
 break;
 case 61:
-//#line 246 "Arith.y"
+//#line 178 "Arith.y"
 { yyval = new TermNodeX(val_peek(2),EnumOp.DIV,val_peek(0)); }
 break;
 case 62:
-//#line 247 "Arith.y"
+//#line 179 "Arith.y"
 { yyval = new TermNodeX(val_peek(2),EnumOp.MODULO,val_peek(0)); }
 break;
 case 63:
-//#line 248 "Arith.y"
+//#line 180 "Arith.y"
 { yyval = new TermNodeX(val_peek(2),EnumOp.DIVENTERA,val_peek(0)); }
 break;
 case 64:
-//#line 252 "Arith.y"
+//#line 184 "Arith.y"
 { yyval = new FactorNode(EnumOp.MAS,val_peek(0)); }
 break;
 case 65:
-//#line 253 "Arith.y"
+//#line 185 "Arith.y"
 { yyval = new FactorNode(EnumOp.MENOS,val_peek(0)); }
 break;
 case 66:
-//#line 254 "Arith.y"
+//#line 186 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 67:
-//#line 258 "Arith.y"
+//#line 190 "Arith.y"
 { yyval = val_peek(0); }
 break;
 case 68:
-//#line 259 "Arith.y"
+//#line 191 "Arith.y"
 { yyval = new PowerNode(val_peek(2),val_peek(0)); }
 break;
 case 69:
-//#line 263 "Arith.y"
+//#line 195 "Arith.y"
 {yyval = val_peek(0);}
 break;
 case 70:
-//#line 264 "Arith.y"
+//#line 196 "Arith.y"
 {yyval = val_peek(0);}
 break;
 case 71:
-//#line 265 "Arith.y"
+//#line 197 "Arith.y"
 {yyval = val_peek(0);}
 break;
 case 72:
-//#line 266 "Arith.y"
+//#line 198 "Arith.y"
 {
                               yyval = val_peek(0);
                           }
 break;
-//#line 939 "Parser.java"
+//#line 920 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

@@ -3,8 +3,6 @@ public interface Visitor{
    public void visit(StringLeaf s);
    public void visit(IntLeaf n);
    public void visit(IdentifierLeaf n);
-   /* this isnt working, 
-   */
    public void visit(FloatLeaf n);
    public void visit(PowerNode p);
    public void visit(FactorNode p);
@@ -170,24 +168,15 @@ class PrintVisitor implements Visitor{
       System.out.println("Soy nodo float valor: "+ n.getValue().dval);
    }
    
-   /* 
-      IfNode Mejorado es un if con una lista (posiblemente vacia ) de elif 
-      Por lo que , tengo que visitar el if y luego visitar los elif
-   */
    public void visit(Node n){
       System.out.println("Soy clase generica Nodo");
    }
    
-   /*
-      THIS SUCKS!
-   */
-   /* Check creo que no lo uso */
    public void visit(AuxTermNode n){
       System.out.println("SOY AUXTERMNODE NO DEBERIAS VER ESTO!");
       n.print();
    }
 
-   /* Check no lo uso */
    public void visit(TermNode n){
       System.out.println("SOY TERMNODE NO DEBERIAS VER ESTO!");
       n.print();

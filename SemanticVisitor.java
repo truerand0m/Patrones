@@ -22,7 +22,6 @@ public class SemanticVisitor implements Visitor{
          System.out.println("We cant continue var "+n.name+" not defined");
          System.exit(1);
       }
-      /* dont know */
       else{
       }
    }
@@ -77,7 +76,6 @@ public class SemanticVisitor implements Visitor{
       r.accept(this);
    }
 
-   /* THis is the assignation node */
    public void visit(EXPRN n){
       System.out.println("Soy nodo Expr__:");
       Node l = n.getLeftChild();
@@ -86,7 +84,6 @@ public class SemanticVisitor implements Visitor{
       r.accept(this);
    }
    
-   /* What the fuck is this ? */
    public void visit(ExprNode n){
       Node l = n.getLeftChild();
       Node r = n.getRightChild();
@@ -119,7 +116,6 @@ public class SemanticVisitor implements Visitor{
       System.out.println("]");
    }
    
-   /* TOCHECK: How 2 analyze this*/
    public void visit(WhileNode n){
       System.out.println("While:(");
       n.getLeftChild().print();
@@ -128,14 +124,11 @@ public class SemanticVisitor implements Visitor{
       System.out.println("}");
    }
 
-   /* New Nodes */
    public void visit(AuxTermNode n){
       System.out.println("SOY AUXTERMNODE NO DEBERIAS VER ESTO!");
       n.print();
    }
-
-   /* Falta visitar esto */
-   /* Creo que este nodo no lo utilizo */
+   
    public void visit(TermNode n){
       System.out.println("SOY TERMNODE NO DEBERIAS VER ESTO!");
       n.print();
@@ -150,21 +143,14 @@ public class SemanticVisitor implements Visitor{
       n.print();
    }
 
-   /* TOCHECK: How 2 analyze this*/
-   /* 
-      IfNode Mejorado es un if con una lista (posiblemente vacia ) de elif 
-      Por lo que  tengo que visitar el if y luego visitar los elif
-   */
    public void visit(IFNodeMejorado n){
       System.out.print("IfMejorado");
-      //Visitamos la condicion y el cuerpo
       Node cond = n.getLeftChild();
       System.out.println("Pase nodo cond");
       Node body = n.getRightChild();
       System.out.println("Pase nodo body");
       cond.accept(this);
       body.accept(this);
-      //Ahora visitamos los elifs
       ArrayList<Node> elifs = n.getChilds();      
       if(elifs!=null){
          for(int i=0;i<elifs.size();i++){
@@ -174,17 +160,12 @@ public class SemanticVisitor implements Visitor{
       }
    }
    
-   /* TOCHECK: How 2 analyze this*/
-   /* Creo que no utilizo este nodo, es un nodo temporal para 
-   almacenar elifs, pero despues se destruye 
-   */
    public void visit(ElifNode n){
       System.out.print("ELIF");
       System.out.println("SOY ElifNode NO DEBERIAS VER ESTO!");
       n.print();
    }
    
-   /* TOCHECK: How 2 analyze this*/
    public void visit(SingleElifNode n){
       n.print();
       Node cond = n.getLeftChild();

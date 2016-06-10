@@ -2,62 +2,59 @@ import java.util.Iterator;
 import java.util.*;
 
 public class SymbolTable {
+   static int usedvars=0;
    private HashMap st = new HashMap();
 
    public void put(Symbol s) {
-      st.put(s.getKey(), s.getValue());
+      st.put(s.getKey(), s.getValues());
    }
    
-   
-   public String get(String key){
-      return st.get(key).toString();
+   static void imprime(Object ar){
+      int[] arr = (int[])ar;
+      for(int i=0;i<arr.length;i++)
+         System.out.println(arr[i]);
    }
-
-   /*
-       Simbolo LookUp(String var):
-       Busca en la tabla la información de la variable con nombre var.
-       Si no la encuentra regresa null.
-   */
-   public Symbol lookUp(String key){
-      if(st.get(key)!=null)
-         return new Symbol(key,(String)st.get(key));
+   
+   public int[] lookUp(String key){
+      if(st.get(key)!=null){
+         int[] vararray = getVarInfo(key);
+         return vararray;
+      }
       return null;
    }
 
+   public int[] getVarInfo(String key){
+      Object o = st.get(key);
+      return (int[])o;
+   }
+   
+   public int getVarType(String key){
+      if(getVarInfo(key)!=null)
+         return getVarInfo(key)[0];
+      return -1;
+   }
+   
+   public int getVarIndex(String key){
+      if(getVarInfo(key)!=null)
+         return getVarInfo(key)[1];
+      return -1;
+   }
+   
    public int size(){
       return st.size();
    }
-
-   /* Show all the vars */
-   public void showAll() {
-      Iterator itval = st.entrySet().iterator();
-      while(itval.hasNext())
-         System.out.println(itval.next());
+   
+   public static void imprime(int[] arr){
+      System.out.println("type; "+arr[0]+"idx; "+arr[1]);
    }
-
-   /***********************************************************************
-   * Test
-   **********************************************************************/
-   public static void main(String[] args) {
-      SymbolTable st = new SymbolTable();
-
-      // make some symbols
-      Symbol[] symbols = new Symbol[]{
-         new Symbol("a","int"),
-         new Symbol("b","float"),
-         new Symbol("c","Object")
-      };
-
-      //add them
-      for(int i=0;i<symbols.length;i++)
-         st.put(symbols[i]);
-
-      // searching
-      System.out.println("\nProbando LookUp");
-      System.out.println(st.lookUp("d"));
-      System.out.println(st.lookUp("a"));
-
-      System.out.println("\nMuestro todas las llaves:");
-      st.showAll();
+   
+   public void showAll() {
+      Iterator it = st.entrySet().iterator();
+      while(it.hasNext()){
+         Map.Entry pair = (Map.Entry)it.next();
+         System.out.println("name "+pair.getKey());
+         int[] c= lookUp(""+pair.getKey());
+         imprime(c);
+      }
    }
 }

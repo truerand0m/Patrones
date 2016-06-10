@@ -1,45 +1,38 @@
-/** Componente. The generic Node class. */
 import java.util.ArrayList;
-/*
-*/
 public class Node extends Object{
    Children childrenNodes;
    ParserVal value;
    int type;
-   
-   /* Added */
    Node node;
    int op;
    ArrayList<Node> nodos;
 
    public Children getChildren(){ return null; }
 
-   /* Added */
    public ArrayList<Node> getNodos(){ return null; }
-   /* added */
+   
    public void addChilds(ArrayList<Node> nodes){}
-   /* added */
+   
    public void addChild(Node n){}
-   /* added */
+   
    public Node getChild(){ return null; }
-
+   
    public Node getLeftChild(){ return null; }
-
+   
    public Node getRightChild(){ return null; }
-
+   
    public ParserVal getValue(){ return value; }
-
+   
    public int getType(){ return type; }
-
+   
    public void setValue(ParserVal nuevo){ value = nuevo; }
-
+   
    public void setType(int nuevo){ type = nuevo; }
-
+   
    public void print(){
       System.out.println("Node\n "+"value: " + value +"\ntipo" + type);
       printChildren();
    }
-
    public String imprime(){
       return "Node\n "+"value: " + value +"\ntipo" + type;
    }
@@ -101,25 +94,11 @@ class BinaryNode extends Composite{
    }
 }
 
-/*
-      ||||||||||||||||||   ||||        |||||||||||
-      |||            |||   ||||        |||      \\\
-      |||            |||   ||||        |||      |||
-      ||||||||||||||||||   |||||||||   ||||||||///
-*/
-
-//egrep -o "(\s(rs\S+))" data.txt > filter.txt
-
-//xor_expr: and_expr ('^' and_expr)*
-//and_expr: arith_expr ('&' arith_expr)*
-   
-/* No lo uso */
 class StmtNode extends Node{
    Node node;
    ArrayList<Node> nodos;
    int type;
 
-   //eliminar node
    public StmtNode(Node n){
       this.node = n;
       nodos = new ArrayList<Node>();
@@ -159,7 +138,6 @@ class StmtNode extends Node{
    }
 }
 
-// I dont know what im doing
 class Lista extends Node{
    public Lista(Node n){
       this.nodos = new ArrayList<Node>();
@@ -175,7 +153,6 @@ class Lista extends Node{
    }
 }
 
-/* CHECK No lo uso */
 class IfNode extends BinaryNode{
    ArrayList<Node> nodos;
    public IfNode(Node test,Node suite){
@@ -189,7 +166,6 @@ class IfNode extends BinaryNode{
       System.out.println("]Then:[");
       getRightChild().print();
       System.out.println("]");
-      //imprimo los elif
       for(int i=0;i<nodos.size();i++){
          System.out.println("Elif[");
          nodos.get(i).print();
@@ -210,7 +186,6 @@ class IfNode extends BinaryNode{
    }
 }
 
-//rename this
 class IFNodeMejorado extends BinaryNode{
    ArrayList<Node> hijos;
    public IFNodeMejorado(Node test,Node suite){
@@ -243,7 +218,6 @@ class IFNodeMejorado extends BinaryNode{
       hijos.add(n);
    }
    
-   /* */
    public void addChilds(ArrayList<Node> nodes){
       for(int i=0; i< nodes.size(); i++){
          hijos.add(nodes.get(i));
@@ -264,7 +238,6 @@ class IFNodeMejorado extends BinaryNode{
    }
 }
 
-/* Wrapper para nodos elif */
 class ElifNode extends BinaryNode{
    ArrayList<Node> hijos;
    public ElifNode(Node test,Node suite){
@@ -357,7 +330,6 @@ class SStmtNode extends Node{
    ArrayList<Node> nodos;
    int type;
 
-   //eliminar node
    public SStmtNode(Node n){
       this.node = n;
       nodos = new ArrayList<Node>();
@@ -373,13 +345,10 @@ class SStmtNode extends Node{
    }
 
    public void print(){
-      //System.out.println("SStmtNode\n "+"value: " + value +"\ntipo" + type);
       printChildren();
    }
 
    public String imprime(){
-      //return "Node\n "+"value: " + value +"\ntipo" + type;
-      //String temp= "SStmtNode: "+node.imprime();
       String temp= "SStmtNode: ";
       for(int i=0;i<nodos.size();i++){
          temp+= nodos.get(i).imprime();
@@ -397,8 +366,7 @@ class SStmtNode extends Node{
       v.visit(this);
    }
 }
-/* CHECK: Asignar lo del lado derecho al izquierdo */ 
-/* THis is the node for Assignation */
+
 class EXPRN extends BinaryNode{
    public EXPRN(Node l, Node r){
       super(l,r);
@@ -408,14 +376,6 @@ class EXPRN extends BinaryNode{
       System.out.println("Nodo XPR_STMT :");
       System.out.println("\nIzq[");
       getLeftChild().print();
-      //SEMANTICTEST: Sabemos que el lado izq es un id, tomamos el 
-      //id y lo agregamos a la tabla
-      /*
-      IdentifierLeaf idlf = (IdentifierLeaf)getLeftChild();
-      //DEBUGSystem.out.println("MUAJAJA id "+idlf.name);
-      Parser.symtable.put(new Symbol(idlf.name,"undefined"));
-      */
-      //FIN SEMANTICTEST
       System.out.println("]");
       System.out.println("=");
       System.out.println("Der[");
@@ -433,12 +393,9 @@ class EXPRN extends BinaryNode{
    
    public void setType(){
       IdentifierLeaf idlf = (IdentifierLeaf)getLeftChild();
-      //DEBUGSystem.out.println("MUAJAJA id "+idlf.name);
-      //DEBUG
       int rtype = getRightChild().getType();
-      Parser.symtable.put(new Symbol(idlf.name,""+rtype));
+      Parser.symtable.put(new Symbol(idlf.name,rtype));
       System.out.println("tipe "+idlf.imprime()+" -> "+rtype);
-      System.out.println("tipe de la tabla: "+Parser.symtable.get(idlf.name));
    }
 }
 
@@ -453,7 +410,6 @@ class PrintNode extends Node{
       this.nodos = new ArrayList<Node>();
    }
 
-   //eliminar node
    public PrintNode(Node n){
       this.node = n;
       nodos = new ArrayList<Node>();
@@ -478,7 +434,6 @@ class PrintNode extends Node{
    }
 
    public String imprime(){
-      //return "Node\n "+"value: " + value +"\ntipo" + type;
       String temp= "PrintNode: ";
       for(int i=0;i<nodos.size();i++){
          temp+= nodos.get(i).imprime();
@@ -497,7 +452,6 @@ class PrintNode extends Node{
    }
 }
 
-/* CHECK: Falta asignar tipo */
 class OrNode extends BinaryNode{
    public OrNode(Node l, Node r){
       super(l,r);
@@ -522,13 +476,11 @@ class OrNode extends BinaryNode{
    }
 }
 
-/* CHECK: Falta asignar tipo */
 class AndTestNode extends Node{
    Node node;
    ArrayList<Node> nodos;
    int type;
 
-   //eliminar node
    public AndTestNode(Node n){
       this.node = n;
       nodos = new ArrayList<Node>();
@@ -549,7 +501,6 @@ class AndTestNode extends Node{
    }
 
    public String imprime(){
-      //return "Node\n "+"value: " + value +"\ntipo" + type;
       String temp= "AndTestNode: "+node.imprime();
       for(int i=0;i<nodos.size();i++){
          temp+= nodos.get(i).imprime();
@@ -568,10 +519,8 @@ class AndTestNode extends Node{
    }
 }
 
-/* CHECK: Falta asignar tipo */
 class NotNode extends Node{
    Node node;
-   //('+'|'-') factor | power
    public NotNode(Node n){
       node = n;
    }
@@ -599,11 +548,6 @@ class NotNode extends Node{
    }
 }
 
-/* Esto me es util para nodos de hojas auxiliares,
-   de forma Operador o Signo, Valor,
-   ademas, estos pueden tener referencias a nodos de su
-   mismo tipo
-*/
 class CmpNode extends Node{
    //term: factor (('*'|'/'|'%'|'//') factor)*
    int op;
@@ -648,8 +592,6 @@ class CmpNode extends Node{
    }
 }
 
-/* CHECK: Falta asignar tipo */
-/* CHECK no lo uso */
 class CompNode extends Node{
    int op;
    Node node;
@@ -692,8 +634,6 @@ class CompNode extends Node{
    }
 }
 
-/* CHECK: Falta asignar tipo */
-// expr: xor_expr ('|' xor_expr)*
 class ExprNode extends BinaryNode{
    public ExprNode(Node l, Node r){
       super(l,r);
@@ -770,7 +710,6 @@ class AndNode extends BinaryNode{
 }
 
 class ArithNode extends Node{
-   //term: factor (('*'|'/'|'%'|'//') factor)*
    int op;
    ArrayList<Node> nodes;
    Node l;
@@ -817,11 +756,11 @@ class ArithNode extends Node{
    public void setType(){
       int ltype = this.getLeftChild().getType();
       int rtype = this.getRightChild().getType();
-      System.out.println("tipe ArithType>------------");
-      System.out.println("tipe DEBUG: tipoizq "+ltype+" tipoder "+rtype);
+      //System.out.println("tipe ArithType>------------");
+      //System.out.println("tipe DEBUG: tipoizq "+ltype+" tipoder "+rtype);
       int tipo = TypeTable.table[ltype][rtype];
-      System.out.println("tipe resultante: "+tipo);
-      System.out.println("tipe ArithTypeFIN ------------");
+      //System.out.println("tipe resultante: "+tipo);
+      //System.out.println("tipe ArithTypeFIN ------------");
       if(tipo == -1){
          System.out.println("ERROR DE TIPOS con ");
          getLeftChild().print();
@@ -832,10 +771,7 @@ class ArithNode extends Node{
    }
 }
 
-/* Term no agrega nada a su lista */
-/* Es un arbol binario */
 class TermNodeX extends Node{
-   //term: factor (('*'|'/'|'%'|'//') factor)*
    int op;
    ArrayList<Node> nodes;
    Node l;
@@ -881,11 +817,11 @@ class TermNodeX extends Node{
    public void setType(){
       int ltype = this.getLeftChild().getType();
       int rtype = this.getRightChild().getType();
-      System.out.println("tipe TermType>------------");
-      System.out.println("tipe DEBUG: tipoizq "+ltype+" tipoder "+rtype);
+      //System.out.println("tipe TermType>------------");
+      //System.out.println("tipe DEBUG: tipoizq "+ltype+" tipoder "+rtype);
       int tipo = TypeTable.table[ltype][rtype];
-      System.out.println("tipe resultante: "+tipo);
-      System.out.println("tipe TermTypeFIN------------");
+      //System.out.println("tipe resultante: "+tipo);
+      //System.out.println("tipe TermTypeFIN------------");
       if(tipo == -1){
          System.out.println("ERROR DE TIPOS con ");
          getLeftChild().print();
@@ -924,10 +860,10 @@ class FactorNode extends Node{
    }
    
    public void setType(){
-      System.out.println("tipe FactorType");
+      //System.out.println("tipe FactorType");
       this.type = getLeftChild().getType();
-      System.out.println("tipe "+this.type);
-      System.out.println("tipe FactorFin");
+      //System.out.println("tipe "+this.type);
+      //System.out.println("tipe FactorFin");
    }
 }
 
@@ -957,11 +893,11 @@ class PowerNode extends BinaryNode{
       //tomo el tipo de izq y de derecho y los comparo
       int ltype = this.getLeftChild().getType();
       int rtype = this.getRightChild().getType();
-      System.out.println("tipe PowerType");
-      System.out.println("tipe DEBUG: tipoizq "+ltype+" tipoder "+rtype);
+      //System.out.println("tipe PowerType");
+      //System.out.println("tipe DEBUG: tipoizq "+ltype+" tipoder "+rtype);
       int tipo = TypeTable.table[ltype][rtype];
-      System.out.println("tipe resultante: "+tipo);
-      System.out.println("tipe PowerTypeFIN ");
+      //System.out.println("tipe resultante: "+tipo);
+      //System.out.println("tipe PowerTypeFIN ");
       if(tipo == -1){
          System.out.println("ERROR DE TIPOS con ");
          getLeftChild().print();

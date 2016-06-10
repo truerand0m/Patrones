@@ -1,0 +1,55 @@
+||||||||||||\\\\\\	|||||	|||||	||||||||||||||		||||||||||||||
+|||||||		//////	|||||	|||||	||||					|||||
+|||||||||||||||||		|||||	|||||	||||||||||||||		||||||||||||||
+|||||||		\\\\\\	|||||	|||||	||||		|||||					|||||
+||||||||||||//////	|||||||||||	||||||||||||||		||||||||||||||
+
+													...everywhere
+
+Oolong esta lleno de bugs;
+Sobretodo al manipular flotantes:
+[1] No reconoce flotantes:
+	usando ldc {flotante} da un error 
+	Esto se corrigio modificando Oolong.java y Lexer.java
+	del codigo fuente Oolong.
+	
+[2]
+Si se almacenan flotantes para locaciones mayores a 3 el programa falla:
+Ejemplo:
+Si todo el codigo consiste en:
+	w = 1.5;
+	print w;
+	x = 10;
+	print x;
+
+El codigo generado es: que al compilarlo y ejecutarlo da error:
+Stack size too large, se intento corregir añadiendo la linea
+.limit stack 1000 (espacio de sobra para el programa actual)
+pero no lo soluciona.
+El problema es que oolong no aloja bien para instrucciones de tipo
+fstore n con n>= 4, donde n es el espacio  donde se alojara
+
+	.class public super Program
+	.super java/lang/Object
+	.method public static main ([Ljava/lang/String;)V
+
+	ldc 1.5																
+	fstore 5
+	getstatic java/lang/System/out Ljava/io/PrintStream;
+	fload 5
+	invokevirtual java/io/PrintStream/println(F)V
+	sipush 10
+	istore 7
+	getstatic java/lang/System/out Ljava/io/PrintStream;
+	iload 7
+	invokevirtual java/io/PrintStream/println(I)V
+	return
+	.end method
+
+Pero si se cambian las lineas:
+	fstore 5 por fstore 3
+	...
+	fload 5 por fload 3
+	El programa ya funciona.
+
+...

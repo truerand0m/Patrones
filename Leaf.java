@@ -1,11 +1,3 @@
-/* 
-*Types:
-* 0 null
-* 1 - Integer
-* 2 - Float
-* 3 - Boolean
-* 4 - String
-*/
 public class Leaf extends Node{
    public void print(){
       System.out.println("Soy hoja:");
@@ -16,8 +8,7 @@ public class Leaf extends Node{
    }
 }
 
-class StringLeaf extends Leaf
-{
+class StringLeaf extends Leaf{
    public StringLeaf(String v){
       value = new ParserVal(v);
       type = 4;
@@ -78,8 +69,6 @@ class IdentifierLeaf extends Leaf{
    String name;
 
    public IdentifierLeaf(String id){
-      /* TEst */
-      //Parser.symtable.put(new Symbol(id,"undf"));
       name = id;
    }
 
@@ -93,5 +82,10 @@ class IdentifierLeaf extends Leaf{
 
    public void accept(Visitor v){
       v.visit(this);
+   }
+   
+   /* whatever */
+   public int getType(){
+      return Parser.symtable.getVarType(this.name);
    }
 }
